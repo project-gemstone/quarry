@@ -1,0 +1,23 @@
+# description	: Linux kernel module management utilities
+
+name=kmod
+version=26
+release=1
+source=("https://www.kernel.org/pub/linux/utils/kernel/$name/$name-$version.tar.xz")
+
+build() {
+	cd "$SRC"/$name-$version
+
+	./configure $BUILDFLAGS \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--with-xz \
+		--with-zlib \
+		--disable-manpages
+
+	make
+
+	make DESTDIR="$PKG" install
+
+	install -dm755 "$PKG"/{etc,usr/lib}/{depmod,modprobe}.d
+}
