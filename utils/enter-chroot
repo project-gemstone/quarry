@@ -1,0 +1,56 @@
+#!/bin/bash
+
+trap umount_chroot HUP INT QUIT TERM SIGHUP SIGINT SIGQUIT SIGILL SIGABRT SIGKILL SIGTRAP SIGTERM SIGSTOP SIGSEGV
+
+msg() {
+	printf '[\033[32m INFO\033[m ] %s\n' "$@"
+}
+
+fail() {
+	printf '[\033[31m FAIL\033[m ] %s\n' "$@"
+	exit 1
+}
+
+mount_chroot() {
+	msg "Mounting chroot..."
+	mount -v --bind /dev $ROOTFS/dev
+	mount -vt devpts devpts $ROOTFS/dev/pts -o gid=5,mode=620
+	mount -vt proc proc $ROOTFS/proc
+	mount -vt sysfs sysfs $ROOTFS/sys
+	mount -vt tmpfs tmpfs $ROOTFS/run
+	msg "Done mounting chroot."
+}
+
+umount_chroot() {
+	msg "Unmounting chroot..."
+	umount -v $ROOTFS/dev/pts
+	umount -v $ROOTFS/dev
+	umount -v $ROOTFS/run
+	umount -v $ROOTFS/proc
+	umount -v $ROOTFS/sys
+	msg "Done unmounting chroot."
+}
+
+if [ $1 == "" ]; then
+	fail "No rootfs directory has been specified"
+fi
+
+if [ ! -d "$1" ]; then
+	fail "$1 is not a directory."
+fi
+
+ROOTFS=$1
+
+mount_chroot
+
+chroot "$ROOTFS" /usr/bin/env -i \
+	HOME=/ \
+	TERM="$TERM" \
+	LC_ALL=POSIX \
+	MAKEFLAGS="-j2" \
+	PS1='(bdk_chroot)$ ' \
+	PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/bash --login +h
+
+umount_chroot
+
+exit 0

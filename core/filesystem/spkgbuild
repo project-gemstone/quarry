@@ -1,0 +1,91 @@
+# description	: To be filled in.
+
+name=filesystem
+version=0.1
+release=1
+source=(ld.so.conf blacklist.conf crypttab espdiff fstab genfstab group gshadow host.conf hosts issue issue.net motd os-release passwd profile protocols resolv.conf securetty services shadow shells sysctl)
+sha256sums=('b2aa32976a126ca3ed81229502d7a1fe1e23cf8602a0b2422c54945e58f2c172'
+            '8745e54bbe74a23dd6cc4f79192eb34ed6a0f263cec0a8169183a3a65dc5cd14'
+            'f17d73124b700d7c0055cfeb40e5e8d2db5f158ed15c54ca3ca8f70d5f827f64'
+            'cadcfd167aa242df94179c6d25638820716803249f6d61d3cd82256392e3299e'
+            'e54626e74ed8fee4173b62a545ab1c3a3a069e4217a0ee8fc398d9933e9c1696'
+            '4312f169008b49d623246b5e7a85e9bc8911c4b6096382730f76c2397216adac'
+            'bc3b964013f88dfe232293b1c72f52269a3327b09a7ec7770c69aece4f7f3140'
+            'ddbbb911fb36ad93be240debb560ba47f15f43be4f170184b6a5fe1011bd8a9b'
+            '83b331f98a128e1721c54be5c07bd38ad0d146e89cdecbe0eb53cbc23ff6b86a'
+            'b30167ccb1927f0f62dfb658fee49ba857b3f7b85cc6a4d3c659236bb01b1a03'
+            'f3ea7e6242740c6df26ab42ad510a86787d0df12d4904a05774e78bc0164cd96'
+            'f3ea7e6242740c6df26ab42ad510a86787d0df12d4904a05774e78bc0164cd96'
+            'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+            '318ba5160af4976c62d809128026f93456cd97ede1fb768648e46c6d0967a5d0'
+            '2817608f59233231c71f13535754047c4bd419346a573949510d915041b58fef'
+            'efd103d6e96bb755e11b58eee309667b648c71d1ebda9ff0010a8bbbe7b600e9'
+            '297b784a25fc59641589c6ef05dc26680e2805e9cab37a4ea3699aa072a25c2e'
+            '995b3e0de9fa746214d7578d3dd3073df455fa1326992849fd575411451df5d9'
+            '86918710bf39f24fb93fc9d4239ba8c2814c4227ed2ea1696d9679566a77d992'
+            'b4d36eb75767bebb41c5fa7a35599952e1883b3d3f6332496e1561eeb4067018'
+            'd9f6b820100902bb7189efe553185a41261353d754b190a4f147af15affb3245'
+            '94787a55599e86bc109a3c98e8f071cac0d74951900f915e0a89f21a390f2206'
+            '17c66e08895acfc8b073b8b5218db53efa630f63e0988b35c575d2182259692f')
+
+
+build() {
+	cd "$PKG"
+
+	for d in boot dev etc/{ld.so.conf.d,skel,profile.d,modprobe.d,sysctl.d} home media/{cdrom,flash,usbdisk,floppy,zip} mnt usr var opt srv/http run; do
+		install -d -m755 $d
+	done
+
+	install -d -m555 proc
+	install -d -m555 sys
+	install -d -m0750 home/root
+	install -d -m1777 tmp
+	install -d -m555 -g 11 srv/ftp
+
+	ln -sf home/root root
+
+	ln -sf ../proc/mounts etc/mtab
+
+	touch etc/bdk-release
+
+	for f in ld.so.conf fstab group host.conf hosts issue issue.net motd os-release passwd profile protocols resolv.conf securetty services shells; do
+		install -m644 $SRC/$f etc/
+	done
+
+	for f in gshadow shadow crypttab; do
+		install -m600 $SRC/$f etc/
+	done
+
+	for d in cache/{sources,packages} local opt log/old lib/misc empty; do
+		install -d -m755 var/$d
+	done
+
+	install -d -m1777 var/{tmp,spool/mail}
+
+	install -d -m775 -g 50 var/games
+	ln -sf spool/mail var/mail
+	ln -sf ../run var/run
+	ln -sf ../run/lock var/lock
+
+	for d in bin games include lib/{modules,firmware} share/misc src; do
+		install -d -m755 usr/$d
+	done
+
+	ln -sf usr/bin bin
+	ln -sf usr/bin sbin
+	ln -sf bin usr/sbin
+	ln -sf usr/lib lib
+	ln -sf usr/lib lib64
+
+	for d in bin etc games include lib man sbin share src; do
+		install -d -m755 usr/local/$d
+	done
+
+	install -m644 $SRC/blacklist.conf "$PKG"/etc/modprobe.d/10-blacklist.conf
+
+	install -D -m644 $SRC/sysctl "$PKG"/etc/sysctl.d/10-default.conf
+
+	install -D -m755 $SRC/genfstab "$PKG"/usr/bin/genfstab
+
+	install -D -m755 $SRC/espdiff "$PKG"/usr/games/espdiff
+}

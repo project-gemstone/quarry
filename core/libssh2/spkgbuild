@@ -1,0 +1,20 @@
+# description	: A library implementing the SSH2 protocol as defined by Internet Drafts
+
+name=libssh2
+version=1.9.0
+release=1
+source=("https://www.libssh2.org/download/$name-$version.tar.gz")
+sha256sums=(d5fb8bd563305fd1074dda90bd053fb2d29fc4bce048d182f96eaa466dfadafd)
+
+build() {
+	cd "$SRC"/$name-$version
+
+	./configure $BUILDFLAGS \
+		--prefix=/usr \
+		--with-sysroot=$ROOTFS \
+		--with-libssl-prefix="$ROOTFS"/usr
+
+	make
+
+	make DESTDIR="$PKG" install
+}

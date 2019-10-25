@@ -1,0 +1,44 @@
+# description	: A highly capable, feature-rich programming language
+
+name=perl
+version=5.30.0
+crossver=1953992aafbdeda16ed8aeaddccca46904627bf1
+release=1
+source=("https://www.cpan.org/src/5.0/$name-$version.tar.xz"
+	"https://github.com/arsv/perl-cross/archive/$crossver.tar.gz")
+sha256sums=('ac501cad4af904d33370a9ea39dbb7a8ad4cb19bc7bc8a9c17d8dc3e81ef6306'
+           'f3563990289d7dc3de0784772bafd246ab5e70afd4894ef2e9f9db871aba906f')
+
+build() {
+	cd "$SRC"
+
+	cp -f -r perl-cross-$crossver/* $name-$version/
+
+	cd $name-$version
+
+	./configure $PERLFLAGS \
+		--prefix=/usr \
+		-Dprivlib=/usr/share/perl5/core_perl \
+		-Darchlib=/usr/lib/perl5/core_perl \
+		-Dvendorprefix=/usr \
+		-Dvendorlib=/usr/share/perl5/vendor_perl \
+		-Dvendorarch=/usr/lib/perl5/vendor_perl \
+		-Dsiteprefix=/usr/local \
+		-Dsitelib=/usr/local/share/perl5/site_perl \
+		-Dsitearch=/usr/local/lib/perl5/site_perl \
+		-Dman1dir=/usr/share/man/man1 \
+		-Dman3dir=/usr/share/man/man3 \
+		-Dpager="/usr/bin/less -isR" \
+		-Accflags=-D_GNU_SOURCE \
+		-Dcf_by='OpenBDK' \
+		-Dcccdlflags='-fPIC' \
+		-Dcccdlflags='-fPIC' \
+		-Dccdlflags='-rdynamic' \
+		-Doptimize="$CFLAGS" \
+		-Duseshrplib \
+		-Dusethreads
+
+	make
+
+	make DESTDIR="$PKG" install
+}

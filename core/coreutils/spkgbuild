@@ -1,0 +1,35 @@
+# description	: The basic file, shell and text manipulation utilities
+
+name=coreutils
+version=8.31
+release=2
+source=("http://ftp.gnu.org/gnu/$name/$name-$version.tar.xz")
+sha256sums=('ff7a9c918edce6b4f4b2725e3f9b37b0c4d193531cac49a48b56c4d0d3a9e9fd')
+
+build() {
+	cd "$SRC"/$name-$version
+
+	autoreconf -fiv
+
+	export FORCE_UNSAFE_CONFIGURE=1
+
+	PERL=missing \
+		MAKEINFO=true \
+		./configure $BUILDFLAGS \
+		--prefix=/usr \
+		--libexecdir=/usr/lib \
+		--with-openssl
+
+	make
+
+	make DESTDIR="$PKG" install
+
+	(
+		cd "$PKG"/usr/bin
+		ln -sf install ginstall
+	)
+	(
+		cd "$PKG"/usr/share/man/man1
+		ln -sf install.1 ginstall.1
+	)
+}

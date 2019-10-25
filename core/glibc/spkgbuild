@@ -1,0 +1,55 @@
+# description	: The GNU C Library
+
+name=glibc
+version=2.29
+release=1
+options=(buildflags emptydirs makeflags !strip !zipman)
+source=(http://ftpmirror.gnu.org/gnu/glibc/glibc-$version.tar.xz)
+sha256sums=(f3eeb8d57e25ca9fc13c2af3dae97754f9f643bc69229546828e3a240e2af04b)
+
+build() {
+	cd glibc-$version
+
+	mkdir build && cd build
+
+	if [ "$BOOTSTRAP" == "yes" ]; then
+		msg "Setting bootstrap flags..."
+		export GLIBC_OPTS="--with-headers=$ROOTFS/usr/include --with-binutils=$TOOLS/bin"
+	else
+		export GLIBC_OPTS="--with-headers=/usr/include --with-binutils=/bin"
+	fi
+
+	echo "slibdir=/usr/lib" >>configparms
+	echo "rtlddir=/usr/lib" >>configparms
+	echo "sbindir=/usr/bin" >>configparms
+	echo "rootsbindir=/usr/bin" >>configparms
+
+	BUILD_CC="$HOSTCC" \
+		CC="$XTARGET-gcc" \
+		AR="$XTARGET-ar" \
+		RANLIB="$XTARGET-ranlib" \
+		../configure \
+		--prefix=/usr \
+		--libdir=/usr/lib \
+		--libexecdir=/usr/lib \
+		--build=$XHOST \
+		--host=$XTARGET $GLIBC_OPTS \
+		--with-pkgversion="BDK $version" \
+		--with-bugurl='https://github.com/junland/bdk/issues' \
+		--without-gd \
+		--without-selinux \
+		--enable-add-ons \
+		--enable-bind-now \
+		--enable-kernel=4.9 \
+		--enable-lock-elision \
+		--enable-stack-protector=strong \
+		--enable-stackguard-randomization \
+		--disable-profile \
+		--disable-werror \
+		libc_cv_forced_unwind=yes \
+		libc_cv_c_cleanup=yes
+
+	make -j1
+
+	make install_root=$PKG install
+}

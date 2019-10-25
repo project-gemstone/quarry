@@ -1,0 +1,34 @@
+#!/bin/bash
+
+trap umount_chroot HUP INT QUIT TERM SIGHUP SIGINT SIGQUIT SIGILL SIGABRT SIGKILL SIGTRAP SIGTERM SIGSTOP SIGSEGV
+
+msg() {
+	printf '[\033[32m INFO\033[m ] %s\n' "$@"
+}
+
+fail() {
+	printf '[\033[31m FAIL\033[m ] %s\n' "$@"
+	exit 1
+}
+
+umount_chroot() {
+	msg "Unmounting chroot..."
+	umount -v $ROOTFS/dev/pts || true
+	umount -v $ROOTFS/dev || true
+	umount -v $ROOTFS/run || true
+	umount -v $ROOTFS/proc || true
+	umount -v $ROOTFS/sys || true
+	msg "Done unmounting chroot."
+}
+
+if [ $1 == "" ]; then
+	fail "No rootfs directory has been specified"
+fi
+
+if [ ! -d "$1" ]; then
+	fail "$1 is not a directory."
+fi
+
+ROOTFS=$1
+
+umount_chroot

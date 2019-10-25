@@ -1,0 +1,18 @@
+# description	: Displays and injects information about the toolchain and build host.
+
+name=host-info
+version=0.0.2
+release=1
+source=()
+
+build() {
+  msg "Preamble...\n\n"
+
+  env
+
+  env >$TOOLS/toolchain.env
+
+  echo "TOOLCHAIN_VERSION=$version" >$TOOLS/toolchain.version
+
+  touch $PKG/empty
+}

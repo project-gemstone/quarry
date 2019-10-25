@@ -1,0 +1,121 @@
+# description	: The GNU Compiler Collection
+
+name=gcc
+version=9.2.0
+isl_version=0.19
+release=1
+source=(http://ftpmirror.gnu.org/gnu/gcc/gcc-$version/gcc-$version.tar.xz "http://isl.gforge.inria.fr/isl-$isl_version.tar.xz")
+sha256sums=('ea6ef08f121239da5695f76c9b33637a118dcf63e24164422231917fa61fb206'
+           '6d6c1aa00e2a6dfc509fa46d9a9dbe93af0c451e196a670577a148feecf6b8a5')
+
+build() {
+	if [ -z "$XTARGET" ]; then
+		export XTARGET="$(cc -dumpmachine)"
+	fi
+
+	if [ -z "$GCCOPTS" ]; then
+		case $BUILD_ARCH in
+			amd64 | x86_64)
+				export GCCOPTS="--with-arch=x86-64 --with-tune=generic"
+				;;
+			arm64 | aarch64)
+				export GCCOPTS="--with-arch=armv8-a --enable-fix-cortex-a53-835769 --enable-fix-cortex-a53-843419"
+				;;
+			*)
+				echo "Architecture is not set or is not supported by the gcc package."
+				exit 1
+				;;
+		esac
+	fi
+
+	case "$BARCH" in
+		*) HASHCONFIG="--with-linker-hash-style=gnu" ;;
+	esac
+
+	export CFLAGS_FOR_BUILD=" "
+	export FFLAGS_FOR_BUILD=" "
+	export CXXFLAGS_FOR_BUILD=" "
+	export LDFLAGS_FOR_BUILD=" "
+	export CFLAGS_FOR_TARGET=" "
+	export FFLAGS_FOR_TARGET=" "
+	export CXXFLAGS_FOR_TARGET=" "
+	export LDFLAGS_FOR_TARGET=" "
+
+	cd "$SRC"/gcc-$version
+
+	sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
+
+	mv ../isl-$isl_version isl
+
+	mkdir build
+
+	cd build
+
+	SED=sed \
+		../configure $TOOLFLAGS $GCCOPTS $HASHCONFIG \
+		--prefix=/usr \
+		--libdir=/usr/lib \
+		--libexecdir=/usr/lib \
+		--with-pkgversion="BDK Linux edition $version for $BARCH" \
+		--with-bugurl="https://github.com/junland/bdk/issues" \
+		--with-isl \
+		--with-system-zlib \
+		--enable-__cxa_atexit \
+		--enable-checking=release \
+		--enable-clocale=generic \
+		--enable-default-pie \
+		--enable-default-ssp \
+		--enable-install-libiberty \
+		--enable-languages=c,c++,lto \
+		--enable-libstdcxx-time \
+		--enable-linker-build-id \
+		--enable-lto \
+		--enable-shared \
+		--enable-threads=posix \
+		--enable-tls \
+		--disable-bootstrap \
+		--disable-gnu-indirect-function \
+		--disable-libmudflap \
+		--disable-libsanitizer \
+		--disable-libssp \
+		--disable-libstdcxx-pch \
+		--disable-multilib \
+		--disable-nls \
+		--disable-symvers \
+		--disable-werror
+
+	if [ "$BOOTSTRAP" = "yes" ]; then
+		make AS_FOR_TARGET="$XTARGET-as" LD_FOR_TARGET="$XTARGET-ld"
+	else
+		make
+	fi
+
+	make -j1 DESTDIR="$PKG" install
+
+	ln -sf ../bin/cpp "$PKG"/usr/lib
+
+	install -dm755 "$PKG"/usr/lib/bfd-plugins
+
+	ln -sf /usr/lib/gcc/$XTARGET/$version/liblto_plugin.so "$PKG"/usr/lib/bfd-plugins/
+
+	mkdir -p "$PKG"/usr/share/gdb/auto-load/usr/lib
+
+	mkdir -p "$SRC"/savedlibs
+
+	(
+		cd "$PKG"/usr/bin
+		mv g++ g++-gcc-$version
+		mv gcc gcc-$version
+		ln -sf g++-gcc-$version g++
+		ln -sf gcc-$version gcc
+		ln -sf g++ c++
+		ln -sf gcc cc
+		ln -sf gcc-$version $XTARGET-gcc
+		ln -sf gcc-$version $XTARGET-gcc-$version
+		ln -sf gcc-ar $XTARGET-gcc-ar
+		ln -sf gcc-nm $XTARGET-gcc-nm
+		ln -sf gcc-ranlib $XTARGET-gcc-ranlib
+		ln -sf g++-gcc-$version $XTARGET-c++
+		ln -sf g++-gcc-$version $XTARGET-g++
+	)
+}
