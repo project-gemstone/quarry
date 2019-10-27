@@ -1,15 +1,13 @@
 # description	: Linux kernel module management utilities
 
 name=kmod
-version=25
+version=26
 release=1
 source=("https://www.kernel.org/pub/linux/utils/kernel/$name/$name-$version.tar.xz")
+sha256sums=(7165e6496656159dcb909a91ed708a0fe273a4b128b4b1dc997ccb5189eef1cd)
 
 build() {
 	cd "$SRC"/$name-$version
-
-	export CFLAGS=""
-	export CXXFLAGS=""
 
 	./configure $BUILDFLAGS \
 		--prefix=/usr \

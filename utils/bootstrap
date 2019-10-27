@@ -297,7 +297,7 @@ build_chroot() {
 
 	msg "Now we are going to build the rest of the packages..."
 
-	for pkg in filesystem zlib diffutils tar libgmp libmpfr libmpc binutils gcc gawk file ncurses bzip2 libelf attr acl expat libressl ca-certificates xz lz4 zstd m4 bison bc binutils make sed grep bash coreutils gzip findutils patch scratchpkg pkgconf perl autoconf automake libtool c-ares libev nghttp2 libssh2 curl libarchive readline cpio; do
+	for pkg in filesystem zlib kmod diffutils tar libgmp libmpfr libmpc binutils gcc gawk file ncurses bzip2 libelf attr acl expat libressl ca-certificates xz lz4 zstd m4 bison bc binutils make sed grep bash coreutils gzip findutils patch scratchpkg pkgconf perl autoconf automake libtool c-ares libev nghttp2 libssh2 curl libarchive readline cpio; do
 		case $pkg in
 			*)
 				pkgbuild-target $pkg $ROOTFS
