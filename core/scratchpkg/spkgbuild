@@ -1,7 +1,7 @@
 # description	: Ref. package builder and package manager.
 
 name=scratchpkg
-version=1.0.0
+version=1.0.1
 release=1
 source=("https://github.com/project-gemstone/$name/archive/$version.tar.gz")
 
