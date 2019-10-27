@@ -223,7 +223,7 @@ pkgbuild-target() {
 
 	msg "Installing $1 into $2"
 
-        PKG_NAME=$(ls $PACKAGES | grep "^$1-[[:digit:]]")
+    PKG_NAME=$(ls $PACKAGES | grep "^$1-[[:digit:]]")
 
 	cd $PACKAGES && pkgadd $PKG_NAME --verbose --no-ld-config --root=$2
 
@@ -349,13 +349,13 @@ if [ "$1" == "" ]; then
 fi
 
 if [ "$PACKAGE_ALL" = "yes" ]; then
-        msg "Packing up packages and root filesystem."
+    msg "Packing up packages and root filesystem."
 
 	FILE_DATE=$(date +%Y%m%d_%H%M%S)
 
 	msg "Packing packages..."
 
-	cd $PACKAGES && tar -zcvf $ARTIFACTS/packages-$BUILD_ARCH-$FILE_DATE.tar.gz --exclude 'host-*' --exclude '*.stamp' *
+	cd $PACKAGES && tar -zcvf $ARTIFACTS/packages-stage1-$BUILD_ARCH-$FILE_DATE.tar.gz --exclude 'host-*' --exclude '*.stamp' *
 
 	msg "Setting up temp rootfs..."
 
@@ -370,7 +370,7 @@ if [ "$PACKAGE_ALL" = "yes" ]; then
 
 	msg "Packing rootfs..."
 
-	cd $ARTIFACTS/rootfs && tar -zcvf $ARTIFACTS/rootfs-$BUILD_ARCH-$FILE_DATE.tar.gz *
+	cd $ARTIFACTS/rootfs && tar -zcvf $ARTIFACTS/rootfs-stage1-$BUILD_ARCH-$FILE_DATE.tar.gz *
 
 	msg "Removing temp rootfs"
 

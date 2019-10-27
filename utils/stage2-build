@@ -1,5 +1,7 @@
 #!/bin/bash
 
+trap umount_chroot HUP INT QUIT TERM SIGHUP SIGINT SIGQUIT SIGILL SIGABRT SIGKILL SIGTRAP SIGTERM SIGSTOP SIGSEGV
+
 msg() {
 	printf '[\033[32m INFO\033[m ] %s\n' "$@"
 }
@@ -13,12 +15,62 @@ fail() {
 	exit 1
 }
 
+mount_chroot() {
+	msg "Mounting chroot..."
+	mount -v --bind /dev $ROOTFS/dev
+	mount -vt devpts devpts $ROOTFS/dev/pts -o gid=5,mode=620
+	mount -vt proc proc $ROOTFS/proc
+	mount -vt sysfs sysfs $ROOTFS/sys
+	mount -vt tmpfs tmpfs $ROOTFS/run
+	msg "Done mounting chroot."
+}
+
+umount_chroot() {
+	msg "Unmounting chroot..."
+	umount -v $ROOTFS/dev/pts || true
+	umount -v $ROOTFS/dev || true
+	umount -v $ROOTFS/run || true
+	umount -v $ROOTFS/proc || true
+	umount -v $ROOTFS/sys || true
+	msg "Done unmounting chroot."
+}
+
+run_chroot() {
+  chroot "$ROOTFS" /usr/bin/env -i \
+	  HOME=/ \
+	  TERM="$TERM" \
+	  LC_ALL=POSIX \
+	  MAKEFLAGS="-j2" \
+	  PS1='(chroot)$ ' \
+	  PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/bash +h "$1"
+}
+
+qemu_system_inject() {
+  if [ "$HOST_ARCH" != "$ROOTFS_ARCH" ]; then
+      case $ROOTFS_ARCH in
+        x86_64 | x86-64)
+          msg "Copying /usr/bin/qemu-system-x86_64 to $ROOTFS"
+          cp /usr/bin/qemu-system-x86_64 $ROOTFS/usr/bin
+          ;;
+        aarch64 | arm64)
+          msg "Copying /usr/bin/qemu-system-aarch64 to $ROOTFS"
+          cp /usr/bin/qemu-system-aarch64 $ROOTFS/usr/bin
+          ;;
+        *)
+          fail "Architecture is not supported by 'stage2-build' script -- ( $ROOTFS_ARCH )"
+          ;;
+      esac
+  else
+      msg "Host and root filesystem architectures are the same."
+  fi
+}
+
 if [ ! -n "$1" ]; then
-  fail "Need to specify the directory for quarry repo..."
+  fail "Need to specify the directory for quarry core repo..."
 fi
 
 if [ ! -d "$1" ]; then
-  fail "Quarry repo does not exist..."
+  fail "Quarry core repo does not exist..."
 fi
 
 if [ ! -n "$2" ]; then
@@ -29,5 +81,37 @@ if [ ! -d "$2" ]; then
   fail "Root filesystem does not exist..."
 fi
 
+if [ ! -n "$3" ]; then
+  fail "Need to specify the architecture for the root filesystem..."
+fi
+
+if [ ! -d "$3" ]; then
+  fail "No architecture for root filesystem has been passed..."
+fi
+
 REPO=$1
 ROOTFS=$2
+ROOTFS_ARCH=$3
+HOST_ARCH=$(uname -m)
+
+qemu_system_inject
+
+mount_chroot
+
+msg "Adding packages..."
+
+mkdir -p $ROOTFS/pkgs
+
+cp $REPO/* $ROOTFS/pkgs
+
+msg "Building stage 2 packages..."
+
+for pkg in eudev; do
+	case $pkg in
+		*)
+      run_chroot "cd /pkgs/$pkg && pkgbuild --verbose --skip-shasum"
+			;;
+	esac
+done
+
+msg "Done..."
