@@ -65,6 +65,8 @@ qemu_system_inject() {
   fi
 }
 
+msg "All params: $@"
+
 if [ ! -n "$1" ]; then
   fail "Need to specify the directory for quarry core repo..."
 fi
