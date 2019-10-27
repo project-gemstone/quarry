@@ -116,7 +116,7 @@ cp -r $REPO/* $ROOTFS/pkgs
 
 msg "Building stage 2 packages..."
 
-for pkg in eudev; do
+for pkg in libcap-ng eudev; do
 	case $pkg in
 		*)
       run_chroot_cmd "cd /pkgs/$pkg && pkgbuild --verbose --skip-shasum"
