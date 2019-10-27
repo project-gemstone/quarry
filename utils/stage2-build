@@ -44,7 +44,7 @@ run_chroot_cmd() {
 	  LC_ALL=POSIX \
 	  MAKEFLAGS="-j2" \
 	  PS1='(chroot)$ ' \
-	  PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/bash +h "$1"
+	  PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/bash +h -c "$1"
 }
 
 qemu_system_inject() {
