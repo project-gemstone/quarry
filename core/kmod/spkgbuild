@@ -1,7 +1,7 @@
 # description	: Linux kernel module management utilities
 
 name=kmod
-version=26
+version=25
 release=1
 source=("https://www.kernel.org/pub/linux/utils/kernel/$name/$name-$version.tar.xz")
 
