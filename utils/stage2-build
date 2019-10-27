@@ -85,10 +85,10 @@ if [ ! -n "$3" ]; then
   fail "Need to specify the architecture for the root filesystem..."
 fi
 
-REPO=$1
-ROOTFS=$2
-ROOTFS_ARCH=$3
-HOST_ARCH=$(uname -m)
+export REPO=$1
+export ROOTFS=$2
+export ROOTFS_ARCH=$3
+export HOST_ARCH=$(uname -m)
 
 case $ROOTFS_ARCH in
 		x86_64)
@@ -110,7 +110,7 @@ msg "Adding packages..."
 
 mkdir -p $ROOTFS/pkgs
 
-cp $REPO/* $ROOTFS/pkgs
+cp -r $REPO/* $ROOTFS/pkgs
 
 msg "Building stage 2 packages..."
 
