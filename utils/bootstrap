@@ -359,7 +359,7 @@ if [ "$PACKAGE_ALL" = "yes" ]; then
 
 	msg "Setting up temp rootfs..."
 
-	for pkg in filesystem glibc zlib tar libgmp libmpfr libmpc binutils gcc gawk file ncurses bzip2 libelf attr acl expat libressl ca-certificates xz lz4 zstd m4 bison bc binutils make sed grep bash coreutils gzip findutils patch scratchpkg pkgconf perl autoconf automake libtool c-ares libev nghttp2 libssh2 curl libarchive cpio; do
+	for pkg in filesystem linux-api-headers glibc zlib tar libgmp libmpfr libmpc binutils gcc gawk file ncurses bzip2 libelf attr acl expat libressl ca-certificates xz lz4 zstd m4 bison bc binutils make sed grep bash coreutils gzip findutils patch scratchpkg pkgconf perl autoconf automake libtool c-ares libev nghttp2 libssh2 curl libarchive cpio; do
 		case $pkg in
 			*)
 				PKG_NAME=$(ls $PACKAGES | grep "^$pkg-[[:digit:]]")
