@@ -15,7 +15,8 @@ build() {
 
 	./configure $BUILDFLAGS \
 		--prefix=/usr \
-		--without-python
+		--without-python \
+		--without-python3
 
 	make
 
