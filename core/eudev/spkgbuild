@@ -15,7 +15,7 @@ build() {
 		--libdir=/usr/lib \
 		--sbindir=/usr/bin \
 		--sysconfdir=/etc \
-		--enable-hwdb \
+		--disable-hwdb \
 		--enable-kmod \
 		--enable-split-usr \
 		--disable-introspection \
