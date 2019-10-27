@@ -10,6 +10,7 @@ build() {
 
 	./configure $BUILDFLAGS \
 		--prefix=/usr \
+		--bindir=/bin \
 		--sysconfdir=/etc \
 		--disable-gtk-doc \
 		--with-xz \
