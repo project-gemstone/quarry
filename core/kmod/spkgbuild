@@ -16,7 +16,7 @@ build() {
 		--with-zlib \
 		--disable-manpages
 
-	make
+	make -j1
 
 	make DESTDIR="$PKG" install
 
