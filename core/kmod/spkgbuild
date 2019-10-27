@@ -8,6 +8,9 @@ source=("https://www.kernel.org/pub/linux/utils/kernel/$name/$name-$version.tar.
 build() {
 	cd "$SRC"/$name-$version
 
+	export CFLAGS=""
+	export CXXFLAGS=""
+
 	./configure $BUILDFLAGS \
 		--prefix=/usr \
 		--bindir=/bin \
