@@ -1,7 +1,7 @@
 # description	: The GNU C Library
 
 name=glibc
-version=2.29
+version=2.30
 release=1
 options=(buildflags emptydirs makeflags !strip !zipman)
 source=(http://ftpmirror.gnu.org/gnu/glibc/glibc-$version.tar.xz)
@@ -40,7 +40,8 @@ build() {
 		--without-selinux \
 		--enable-add-ons \
 		--enable-bind-now \
-		--enable-kernel=4.9 \
+		--enable-cet \
+		--enable-kernel=3.2 \
 		--enable-lock-elision \
 		--enable-stack-protector=strong \
 		--enable-stackguard-randomization \
