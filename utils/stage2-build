@@ -35,7 +35,7 @@ umount_chroot() {
 	msg "Done unmounting chroot."
 }
 
-run_chroot() {
+run_chroot_cmd() {
   chroot "$ROOTFS" /usr/bin/env -i \
 	  HOME=/ \
 	  TERM="$TERM" \
@@ -109,7 +109,7 @@ msg "Building stage 2 packages..."
 for pkg in eudev; do
 	case $pkg in
 		*)
-      run_chroot "cd /pkgs/$pkg && pkgbuild --verbose --skip-shasum"
+      run_chroot_cmd "cd /pkgs/$pkg && pkgbuild --verbose --skip-shasum"
 			;;
 	esac
 done
