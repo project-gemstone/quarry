@@ -32,6 +32,8 @@ build() {
 	esac
 
 	make mrproper
+	
+	make headers_check
 
 	make ARCH=$XKARCH INSTALL_HDR_PATH="$PKG"/usr headers_install
 }
