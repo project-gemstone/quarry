@@ -8,8 +8,6 @@ sha256sums=(7165e6496656159dcb909a91ed708a0fe273a4b128b4b1dc997ccb5189eef1cd)
 
 build() {
 	cd "$SRC"/$name-$version
-	
-	autoreconf -fiv
 
 	./configure $BUILDFLAGS \
 		--prefix=/usr \
@@ -20,7 +18,7 @@ build() {
 		--with-zlib \
 		--disable-manpages
 
-	make VERBOSE=1 -j1
+	make -j1
 
 	make DESTDIR="$PKG" install
 
