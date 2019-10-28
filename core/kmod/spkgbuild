@@ -13,12 +13,13 @@ build() {
 		--prefix=/usr \
 		--bindir=/bin \
 		--sysconfdir=/etc \
+		--with-rootlibdir=/lib \
 		--disable-gtk-doc \
 		--with-xz \
 		--with-zlib \
 		--disable-manpages
 
-	make -n -j1
+	make -j1
 
 	make DESTDIR="$PKG" install
 
