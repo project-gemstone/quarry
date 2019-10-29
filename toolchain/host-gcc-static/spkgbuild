@@ -90,7 +90,7 @@ build() {
 
   make -j1 install-gcc install-target-libgcc
   
-  rm --recursive --force $TOOLS/$XTARGET/sys-include
+  rm -rfv $TOOLS/$XTARGET/sys-include
 
   ln -sf $XTARGET-gcc "$TOOLS"/bin/$XTARGET-cc
 
