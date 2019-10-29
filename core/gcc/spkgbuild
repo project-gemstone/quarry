@@ -56,7 +56,7 @@ build() {
 		--prefix=/usr \
 		--libdir=/usr/lib \
 		--libexecdir=/usr/lib \
-		--with-pkgversion="BDK Linux edition $version for $BARCH" \
+		--with-pkgversion="BDK Linux edition $version for $BUILD_ARCH" \
 		--with-bugurl="https://github.com/junland/bdk/issues" \
 		--with-isl \
 		--with-system-zlib \
