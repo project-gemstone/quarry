@@ -89,8 +89,6 @@ build() {
   make -j1 all-gcc all-target-libgcc
 
   make -j1 install-gcc install-target-libgcc
-  
-  rm -rfv $TOOLS/$XTARGET/sys-include
 
   ln -sf $XTARGET-gcc "$TOOLS"/bin/$XTARGET-cc
 
