@@ -137,7 +137,6 @@ gen_config() {
 			    export TOOLFLAGS="--build=$XHOST --host=$XTARGET --target=$XTARGET"
 			    export PKG_CONFIG_PATH="$ROOTFS/usr/lib/pkgconfig:$ROOTFS/usr/share/pkgconfig"
 			    export PKG_CONFIG_SYSROOT_DIR="$ROOTFS"
-			    export PKG_CONFIG_LIBDIR="$ROOTFS/usr/lib/pkgconfig"
 			
 			    ## target binaries
 			    export CROSS_COMPILE="$XTARGET-"
