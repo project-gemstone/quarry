@@ -38,6 +38,7 @@ build() {
 		--with-bugurl='https://github.com/junland/bdk/issues' \
 		--without-gd \
 		--without-selinux \
+		--enable-shared \
 		--enable-add-ons \
 		--enable-bind-now \
 		--enable-cet \
