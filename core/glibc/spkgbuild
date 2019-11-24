@@ -4,7 +4,7 @@ name=glibc
 version=2.30
 release=1
 options=(buildflags emptydirs makeflags !strip !zipman)
-source=(http://ftpmirror.gnu.org/gnu/glibc/glibc-$version.tar.xz)
+source=(https://ftp.gnu.org/gnu/gnu/glibc/glibc-$version.tar.xz)
 sha256sums=(e2c4114e569afbe7edbc29131a43be833850ab9a459d81beb2588016d2bbb8af)
 
 build() {
