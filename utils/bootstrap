@@ -4,6 +4,8 @@ set -e
 
 set +h
 
+umask 022
+
 msg() {
 	printf '[\033[32m INFO\033[m ] %s\n' "$@"
 }
@@ -72,7 +74,7 @@ setup_env() {
 
 	msg "Preparing the environment for build..."
 
-	mkdir -vp "$BUILD_DIR" "$PACKAGES_DIR" "$ROOTFS_DIR" "$TOOLS_DIR" "$ARTIFACTS_DIR"
+	mkdir -vp "$BUILD_DIR" "$PACKAGES_DIR" "$ROOTFS_DIR" "$SYSROOT_DIR" "$TOOLS_DIR" "$ARTIFACTS_DIR"
 
 	mkdir -p $ARTIFACTS_DIR/rootfs
 	
@@ -87,6 +89,8 @@ setup_env() {
 	mkdir -vp $TOOLS_DIR/var/lib/scratchpkg/index
 
 	mkdir -vp $ROOTFS_DIR/var/lib/scratchpkg/index
+
+	mkdir -vp $SYSROOT_DIR/var/lib/scratchpkg/index
 
 	msg "Adding some staging directories inside chroot..."
 
@@ -122,6 +126,7 @@ gen_config() {
 			    export PACKAGES_DIR="$BUILD_DIR/packages"
 			    export ROOTFS_DIR="$BUILD_DIR/rootfs"
 			    export TOOLS_DIR="$BUILD_DIR/toolchain"
+				export SYSROOT_DIR="$BUILD/toolchain/$XTARGET/sysroot"
 			    export PATH="$PATH"
 			    export BOOTSTRAP="yes"
 			
@@ -169,6 +174,7 @@ gen_config() {
 			    export PACKAGES_DIR="$BUILD_DIR/packages"
 			    export ROOTFS_DIR="$BUILD_DIR/rootfs"
 			    export TOOLS_DIR="$BUILD_DIR/toolchain"
+				export SYSROOT_DIR="$BUILD/toolchain/$XTARGET/sysroot"
 			    export BOOTSTRAP="yes"
 			
 			    ## build variables
@@ -207,7 +213,7 @@ pkgbuild-toolchain() {
 	echo "$1" >$PACKAGES_DIR/.$1.stamp
 }
 
-# pkgbuild-target <package name> <install location after building>
+# pkgbuild-target <package name to build> <install location after building>
 pkgbuild-target() {
 
 	unset PKG_NAME
@@ -230,7 +236,7 @@ pkgbuild-target() {
 	echo "$1" >$PACKAGES_DIR/.$1.stamp
 }
 
-# pkgbuild-host <package name> <install location after building>
+# pkgbuild-host <package name to build> <install location after building>
 pkgbuild-host() {
 
 	unset PKG_NAME
@@ -253,6 +259,18 @@ pkgbuild-host() {
 	echo "$1" >$PACKAGES_DIR/.$1.stamp
 }
 
+# pkginstall <package name> <install location>
+pkginstall() {
+
+    unset PKG_NAME
+
+	msg "Just installing $1 into $2"
+
+	PKG_NAME=$(ls $PACKAGES | grep "^$1-[[:digit:]]")
+
+	cd $PACKAGES && pkgadd $PKG_NAME --verbose --no-ld-config --root=$2
+}
+
 # Build the toolchain. (Run first.)
 build_toolchain() {
 	msg "Going to build the toolchain..."
@@ -261,14 +279,8 @@ build_toolchain() {
 
 	mkdir -vp "$TOOLS_DIR"/bin && touch "$TOOLS_DIR"/bin/ldconfig && chmod +x "$TOOLS_DIR"/bin/ldconfig
 
-	for pkg in host-info linux-api-headers host-libgmp host-libmpfr host-libmpc host-binutils host-gcc-static glibc host-gcc host-file host-pkgconf host-m4; do
+	for pkg in host-info host-linux-api-headers host-binutils host-gcc-static host-glibc host-gcc host-file host-pkgconf host-m4; do
 		case $pkg in
-			linux-api-headers)
-				pkgbuild-host $pkg $SYSROOT_DIR
-				;;
-			glibc)
-				pkgbuild-target $pkg $SYSROOT_DIR
-				;;
 			*)
 				pkgbuild-toolchain $pkg
 				;;
@@ -297,6 +309,10 @@ build_chroot() {
 
 	for pkg in filesystem zlib diffutils tar libgmp libmpfr libmpc binutils gcc gawk file ncurses bzip2 libelf attr acl expat libressl ca-certificates xz lz4 zstd m4 bison bc binutils make sed grep bash coreutils gzip findutils patch scratchpkg pkgconf perl autoconf automake libtool c-ares libev nghttp2 libssh2 curl libarchive readline cpio libcap-ng gperf kmod eudev; do
 		case $pkg in
+		    zlib | expat | libressl | libarchive | libelf | libgmp | libmpfr | libmpc)
+			    pkgbuild-target $pkg $ROOTFS_DIR
+				pkginstall $pkg $SYSROOT_DIR
+				;;
 			*)
 				pkgbuild-target $pkg $ROOTFS_DIR
 				;;
