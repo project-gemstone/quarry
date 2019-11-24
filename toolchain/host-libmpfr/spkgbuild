@@ -10,9 +10,9 @@ build() {
   cd "$SRC"/mpfr-$version
 
   ./configure \
-    --prefix=${TOOLS} \
+    --prefix=${TOOLS_DIR} \
     --enable-shared \
-    --with-gmp=${TOOLS} \
+    --with-gmp=${TOOLS_DIR} \
     --enable-thread-safe
 
   make

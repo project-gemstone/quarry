@@ -9,7 +9,7 @@ sha256sums=(87b565e89a9a684fe4ebeeddb8399dce2599f9c9049854ca8c0dfbdea0e21912)
 build() {
   cd "$SRC"/gmp-$version
 
-  ./configure --prefix=${TOOLS} --enable-cxx
+  ./configure --prefix=${TOOLS_DIR} --enable-cxx
 
   make
 

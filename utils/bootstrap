@@ -41,21 +41,22 @@ setup_env() {
 	export HOST_ARCH=$(echo $MACHTYPE | sed 's/-.*//')
 	export QEMU_BIN=$(which $QEMUARCH)
 	export CWD="$(pwd)"
-	export BUILD="$CWD/BUILD.$BUILD_ARCH"
-	export PACKAGES="$BUILD/packages"
-	export ROOTFS="$BUILD/rootfs"
-	export TOOLS="$BUILD/toolchain"
-	export ARTIFACTS="$BUILD/artifacts"
+	export BUILD_DIR="$CWD/BUILD_DIR.$BUILD_ARCH"
+	export PACKAGES_DIR="$BUILD_DIR/packages"
+	export ROOTFS_DIR="$BUILD_DIR/rootfs"
+	export TOOLS_DIR="$BUILD_DIR/toolchain"
+	export SYSROOT_DIR="$TOOLS_DIR/$XTARGET"
+	export ARTIFACTS_DIR="$BUILD_DIR/artifacts"
 
 	## GEMSTONE variables
 	export GEMSTONE="$(pwd)"
 	export GEMSTONE_PACKAGES="$GEMSTONE/core"
-	export GEMSTONE_TOOLS="$GEMSTONE/toolchain"
+	export GEMSTONE_TOOLS_DIR="$GEMSTONE/toolchain"
 	export GEMSTONE_UTILS="$GEMSTONE/utils"
 
 	## compiler variables
 	export LC_ALL="POSIX"
-	export PATH="$GEMSTONE_UTILS:$TOOLS/bin:$PATH"
+	export PATH="$GEMSTONE_UTILS:$TOOLS_DIR/bin:$PATH"
 	export ORIGMAKE="$(which make)"
 	export CFLAGS="-g0 -Os -s -pipe"
 	export CXXFLAGS="$CFLAGS"
@@ -71,37 +72,37 @@ setup_env() {
 
 	msg "Preparing the environment for build..."
 
-	mkdir -vp "$BUILD" "$PACKAGES" "$ROOTFS" "$TOOLS" "$ARTIFACTS"
+	mkdir -vp "$BUILD_DIR" "$PACKAGES_DIR" "$ROOTFS_DIR" "$TOOLS_DIR" "$ARTIFACTS_DIR"
 
-	mkdir -p $ARTIFACTS/rootfs
+	mkdir -p $ARTIFACTS_DIR/rootfs
 	
-	mkdir -p $ARTIFACTS/rootfs/var/lib/scratchpkg/index
+	mkdir -p $ARTIFACTS_DIR/rootfs/var/lib/scratchpkg/index
 
-	gen_config host "$BUILD"/host.conf
+	gen_config host "$BUILD_DIR"/host.conf
 
-	gen_config target "$BUILD"/target.conf
+	gen_config target "$BUILD_DIR"/target.conf
 
 	msg "Setting package index..."
 
-	mkdir -vp $TOOLS/var/lib/scratchpkg/index
+	mkdir -vp $TOOLS_DIR/var/lib/scratchpkg/index
 
-	mkdir -vp $ROOTFS/var/lib/scratchpkg/index
+	mkdir -vp $ROOTFS_DIR/var/lib/scratchpkg/index
 
 	msg "Adding some staging directories inside chroot..."
 
-	mkdir -vp $ROOTFS/var/cache/scratchpkg/sources
+	mkdir -vp $ROOTFS_DIR/var/cache/scratchpkg/sources
 
-	mkdir -vp $ROOTFS/var/cache/scratchpkg/packages
+	mkdir -vp $ROOTFS_DIR/var/cache/scratchpkg/packages
 
-	mkdir -vp $ROOTFS/var/cache/scratchpkg/log
+	mkdir -vp $ROOTFS_DIR/var/cache/scratchpkg/log
 
-	msg "Backing up env to $BUILD/build.env"
+	msg "Backing up env to $BUILD_DIR/build.env"
 
-	env >$BUILD/build.env
+	env >$BUILD_DIR/build.env
 
 	msg "Adding export command to env file"
 
-	sed -i 's/^/export /' $BUILD/build.env
+	sed -i 's/^/export /' $BUILD_DIR/build.env
 }
 
 gen_config() {
@@ -115,12 +116,12 @@ gen_config() {
 			    ## general variables
 			    export LC_ALL="$LC_ALL"
 			    export BUILD_ARCH="$BUILD_ARCH"
-			    export ROOTFS="$ROOTFS"
-			    export TOOLS="$TOOLS"
-			    export PKGDEST="$PACKAGES"
-			    export PACKAGES="$BUILD/packages"
-			    export ROOTFS="$BUILD/rootfs"
-			    export TOOLS="$BUILD/toolchain"
+			    export ROOTFS_DIR="$ROOTFS_DIR"
+			    export TOOLS_DIR="$TOOLS_DIR"
+			    export PKGDEST="$PACKAGES_DIR"
+			    export PACKAGES_DIR="$BUILD_DIR/packages"
+			    export ROOTFS_DIR="$BUILD_DIR/rootfs"
+			    export TOOLS_DIR="$BUILD_DIR/toolchain"
 			    export PATH="$PATH"
 			    export BOOTSTRAP="yes"
 			
@@ -135,8 +136,8 @@ gen_config() {
 			    export HOSTCXX="$HOSTCXX"
 			    export BUILDFLAGS="--build=$XHOST --host=$XTARGET"
 			    export TOOLFLAGS="--build=$XHOST --host=$XTARGET --target=$XTARGET"
-			    export PKG_CONFIG_PATH="$ROOTFS/usr/lib/pkgconfig:$ROOTFS/usr/share/pkgconfig"
-			    export PKG_CONFIG_SYSROOT_DIR="$ROOTFS"
+			    export PKG_CONFIG_PATH="$ROOTFS_DIR/usr/lib/pkgconfig:$ROOTFS_DIR/usr/share/pkgconfig"
+			    export PKG_CONFIG_SYSROOT_DIR="$ROOTFS_DIR"
 			
 			    ## target binaries
 			    export CROSS_COMPILE="$XTARGET-"
@@ -149,7 +150,7 @@ gen_config() {
 			    export STRIP="$XTARGET-strip"     
 			
 			    ## scratchpkg variables
-			    PACKAGE_DIR=$PACKAGES
+			    PACKAGE_DIR=$PACKAGES_DIR
 			    DOWNLOAD_PROG="wget"
 			    WGET_OPTS="--no-check-certificate --tries=15"
 			    CURL_OPTS="--insecure"
@@ -161,13 +162,13 @@ gen_config() {
 			    ## general variables
 			    export LC_ALL="$LC_ALL"
 			    export BUILD_ARCH="$BUILD_ARCH"
-			    export ROOTFS="$ROOTFS"
-			    export TOOLS="$TOOLS"
-			    export PKGDEST="$PACKAGES"
+			    export ROOTFS_DIR="$ROOTFS_DIR"
+			    export TOOLS_DIR="$TOOLS_DIR"
+			    export PKGDEST="$PACKAGES_DIR"
 			    export PATH="$PATH"
-			    export PACKAGES="$BUILD/packages"
-			    export ROOTFS="$BUILD/rootfs"
-			    export TOOLS="$BUILD/toolchain"
+			    export PACKAGES_DIR="$BUILD_DIR/packages"
+			    export ROOTFS_DIR="$BUILD_DIR/rootfs"
+			    export TOOLS_DIR="$BUILD_DIR/toolchain"
 			    export BOOTSTRAP="yes"
 			
 			    ## build variables
@@ -180,7 +181,7 @@ gen_config() {
 			    export HOSTCXX="$HOSTCXX"
 			
 			    ## pkgbuild variables
-			    PACKAGE_DIR=$PACKAGES
+			    PACKAGE_DIR=$PACKAGES_DIR
 			    DOWNLOAD_PROG="wget"
 			    WGET_OPTS="--no-check-certificate --tries=15"
 			    CURL_OPTS="--insecure"
@@ -191,19 +192,19 @@ gen_config() {
 }
 
 # pkgbuild-toolchain <package name>
-# Note: Installs into $TOOLS directory.
+# Note: Installs into $TOOLS_DIR directory.
 pkgbuild-toolchain() {
 
-	if [ -f "$PACKAGES/.$1.stamp" ]; then
+	if [ -f "$PACKAGES_DIR/.$1.stamp" ]; then
 		msg "$1 stamp exists, skipping..."
 		return 0
 	fi
 
 	msg "Building $1 for toolchain using host config..."
 
-	cd $GEMSTONE_TOOLS/$1 && pkgbuild --verbose --config=$BUILD/host.conf
+	cd $GEMSTONE_TOOLS_DIR/$1 && pkgbuild --verbose --config=$BUILD_DIR/host.conf
 
-	echo "$1" >$PACKAGES/.$1.stamp
+	echo "$1" >$PACKAGES_DIR/.$1.stamp
 }
 
 # pkgbuild-target <package name> <install location after building>
@@ -211,22 +212,22 @@ pkgbuild-target() {
 
 	unset PKG_NAME
 
-	if [ -f "$PACKAGES/.$1.stamp" ]; then
+	if [ -f "$PACKAGES_DIR/.$1.stamp" ]; then
 		msg "$1 stamp exists, skipping..."
 		return 0
 	fi
 
 	msg "Building $1 using target config..."
 
-	cd $GEMSTONE_PACKAGES/$1 && pkgbuild --verbose --skip-shasum --config=$BUILD/target.conf
+	cd $GEMSTONE_PACKAGES/$1 && pkgbuild --verbose --skip-shasum --config=$BUILD_DIR/target.conf
 
 	msg "Installing $1 into $2"
 
-    PKG_NAME=$(ls $PACKAGES | grep "^$1-[[:digit:]]")
+    PKG_NAME=$(ls $PACKAGES_DIR | grep "^$1-[[:digit:]]")
 
-	cd $PACKAGES && pkgadd $PKG_NAME --verbose --no-ld-config --root=$2
+	cd $PACKAGES_DIR && pkgadd $PKG_NAME --verbose --no-ld-config --root=$2
 
-	echo "$1" >$PACKAGES/.$1.stamp
+	echo "$1" >$PACKAGES_DIR/.$1.stamp
 }
 
 # pkgbuild-host <package name> <install location after building>
@@ -234,22 +235,22 @@ pkgbuild-host() {
 
 	unset PKG_NAME
 
-	if [ -f "$PACKAGES/.$1.stamp" ]; then
+	if [ -f "$PACKAGES_DIR/.$1.stamp" ]; then
 		msg "$1 stamp exists, skipping..."
 		return 0
 	fi
 
 	msg "Building $1 using host config..."
 
-	cd $GEMSTONE_PACKAGES/$1 && pkgbuild --verbose --skip-shasum --config=$BUILD/host.conf
+	cd $GEMSTONE_PACKAGES/$1 && pkgbuild --verbose --skip-shasum --config=$BUILD_DIR/host.conf
 
 	msg "Installing $1 into $2"
 
-	PKG_NAME=$(ls $PACKAGES | grep "^$1-[[:digit:]]")
+	PKG_NAME=$(ls $PACKAGES_DIR | grep "^$1-[[:digit:]]")
 
-	cd $PACKAGES && pkgadd $PKG_NAME --verbose --no-ld-config --root=$2
+	cd $PACKAGES_DIR && pkgadd $PKG_NAME --verbose --no-ld-config --root=$2
 
-	echo "$1" >$PACKAGES/.$1.stamp
+	echo "$1" >$PACKAGES_DIR/.$1.stamp
 }
 
 # Build the toolchain. (Run first.)
@@ -258,17 +259,15 @@ build_toolchain() {
 
 	msg "Adding fake ldconfig"
 
-	mkdir -vp "$TOOLS"/bin && touch "$TOOLS"/bin/ldconfig && chmod +x "$TOOLS"/bin/ldconfig
+	mkdir -vp "$TOOLS_DIR"/bin && touch "$TOOLS_DIR"/bin/ldconfig && chmod +x "$TOOLS_DIR"/bin/ldconfig
 
 	for pkg in host-info linux-api-headers host-libgmp host-libmpfr host-libmpc host-binutils host-gcc-static glibc host-gcc host-file host-pkgconf host-m4; do
 		case $pkg in
 			linux-api-headers)
-				pkgbuild-host $pkg $ROOTFS
-				msg "Installing $pkg into tools as well..."
-				cd $PACKAGES && pkgadd $pkg*.spkg.* --verbose --root=$TOOLS
+				pkgbuild-host $pkg $SYSROOT_DIR
 				;;
 			glibc)
-				pkgbuild-target $pkg $ROOTFS
+				pkgbuild-target $pkg $SYSROOT_DIR
 				;;
 			*)
 				pkgbuild-toolchain $pkg
@@ -278,19 +277,19 @@ build_toolchain() {
 
 	msg "Cleaning up"
 
-	find "$TOOLS" -name "*.pod" -print0 | xargs --verbose -0 rm -rf
+	find "$TOOLS_DIR" -name "*.pod" -print0 | xargs --verbose -0 rm -rf
 
-	find "$TOOLS" -name ".packlist" -print0 | xargs --verbose -0 rm -rf
+	find "$TOOLS_DIR" -name ".packlist" -print0 | xargs --verbose -0 rm -rf
 
 	msg "Done building toolchain for $BUILD_ARCH"
 
-	echo "Toolchain Finished" >$PACKAGES/.toolchain.stamp
+	echo "Toolchain Finished" >$PACKAGES_DIR/.toolchain.stamp
 }
 
 # Builds the chroot packages. (Must build the toolchain first.)
 build_chroot() {
 
-	if [ ! -f "$PACKAGES/.toolchain.stamp" ]; then
+	if [ ! -f "$PACKAGES_DIR/.toolchain.stamp" ]; then
 		fail "Looks like the toolchain hasn't been compiled yet. Exiting..."
 	fi
 
@@ -299,7 +298,7 @@ build_chroot() {
 	for pkg in filesystem zlib diffutils tar libgmp libmpfr libmpc binutils gcc gawk file ncurses bzip2 libelf attr acl expat libressl ca-certificates xz lz4 zstd m4 bison bc binutils make sed grep bash coreutils gzip findutils patch scratchpkg pkgconf perl autoconf automake libtool c-ares libev nghttp2 libssh2 curl libarchive readline cpio libcap-ng gperf kmod eudev; do
 		case $pkg in
 			*)
-				pkgbuild-target $pkg $ROOTFS
+				pkgbuild-target $pkg $ROOTFS_DIR
 				;;
 		esac
 	done
@@ -354,26 +353,26 @@ if [ "$PACKAGE_ALL" = "yes" ]; then
 
 	msg "Packing packages..."
 
-	cd $PACKAGES && tar -zcvf $ARTIFACTS/packages-stage1-$BUILD_ARCH-$FILE_DATE.tar.gz --exclude 'host-*' --exclude '*.stamp' *
+	cd $PACKAGES_DIR && tar -zcvf $ARTIFACTS_DIR/packages-stage1-$BUILD_ARCH-$FILE_DATE.tar.gz --exclude 'host-*' --exclude '*.stamp' *
 
 	msg "Setting up temp rootfs..."
 
 	for pkg in filesystem linux-api-headers glibc diffutils zlib tar libgmp libmpfr libmpc binutils gcc gawk file ncurses bzip2 libelf attr acl expat libressl ca-certificates xz lz4 zstd m4 bison bc binutils make sed grep bash coreutils gzip findutils patch scratchpkg pkgconf perl autoconf automake libtool c-ares libev nghttp2 libssh2 curl libarchive cpio libcap-ng gperf kmod eudev; do
 		case $pkg in
 			*)
-				PKG_NAME=$(ls $PACKAGES | grep "^$pkg-[[:digit:]]")
-				cd $PACKAGES && pkgadd $PKG_NAME --verbose --no-ld-config --root=$ARTIFACTS/rootfs
+				PKG_NAME=$(ls $PACKAGES_DIR | grep "^$pkg-[[:digit:]]")
+				cd $PACKAGES_DIR && pkgadd $PKG_NAME --verbose --no-ld-config --root=$ARTIFACTS_DIR/rootfs
 				;;
 		esac
 	done
 
 	msg "Packing rootfs..."
 
-	cd $ARTIFACTS/rootfs && tar -zcvf $ARTIFACTS/rootfs-stage1-$BUILD_ARCH-$FILE_DATE.tar.gz *
+	cd $ARTIFACTS_DIR/rootfs && tar -zcvf $ARTIFACTS_DIR/rootfs-stage1-$BUILD_ARCH-$FILE_DATE.tar.gz *
 
 	msg "Removing temp rootfs"
 
-	rm -rf $ARTIFACTS/rootfs
+	rm -rf $ARTIFACTS_DIR/rootfs
 fi
 
 msg "And thats it... Have fun!"

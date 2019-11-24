@@ -14,7 +14,7 @@ build() {
 
 	if [ "$BOOTSTRAP" == "yes" ]; then
 		msg "Setting bootstrap flags..."
-		export GLIBC_OPTS="--with-headers=$ROOTFS/usr/include --with-binutils=$TOOLS/bin"
+		export GLIBC_OPTS="--with-headers=$SYSROOT_DIR/usr/include --with-binutils=$TOOLS_DIR/bin"
 	else
 		export GLIBC_OPTS="--with-headers=/usr/include --with-binutils=/bin"
 	fi

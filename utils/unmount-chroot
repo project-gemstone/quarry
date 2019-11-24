@@ -13,11 +13,11 @@ fail() {
 
 umount_chroot() {
 	msg "Unmounting chroot..."
-	umount -v $ROOTFS/dev/pts || true
-	umount -v $ROOTFS/dev || true
-	umount -v $ROOTFS/run || true
-	umount -v $ROOTFS/proc || true
-	umount -v $ROOTFS/sys || true
+	umount -v $ROOTFS_DIR/dev/pts || true
+	umount -v $ROOTFS_DIR/dev || true
+	umount -v $ROOTFS_DIR/run || true
+	umount -v $ROOTFS_DIR/proc || true
+	umount -v $ROOTFS_DIR/sys || true
 	msg "Done unmounting chroot."
 }
 
@@ -29,6 +29,6 @@ if [ ! -d "$1" ]; then
 	fail "$1 is not a directory."
 fi
 
-ROOTFS=$1
+ROOTFS_DIR=$1
 
 umount_chroot

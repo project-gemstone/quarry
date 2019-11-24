@@ -15,19 +15,19 @@ if [ -z "$BUILD_ARCH" ]; then
       fail "BUILD_ARCH is not set."
 fi
 
-if [ -d "$PWD/BUILD.$BUILD_ARCH" ]; then
-      fail "$PWD/BUILD.$BUILD_ARCH does not exist."
+if [ -d "$PWD/BUILD_DIR.$BUILD_ARCH" ]; then
+      fail "$PWD/BUILD_DIR.$BUILD_ARCH does not exist."
 fi
 
-if [ -d "$PWD/BUILD.$BUILD_ARCH/packages" ]; then
-      fail "$PWD/BUILD.$BUILD_ARCH/packages does not exist."
+if [ -d "$PWD/BUILD_DIR.$BUILD_ARCH/packages" ]; then
+      fail "$PWD/BUILD_DIR.$BUILD_ARCH/packages does not exist."
 fi
 
 FILE_DATE=$(date +%Y%m%d_%H%M%S)
 
 msg "Getting packages."
 
-cd $PWD/BUILD.$BUILD_ARCH/packages && tar -zcvf $PWD/packages-$BUILD_ARCH-$FILE_DATE.tar.gz --exclude 'host-*' --exclude '*.stamp' *
+cd $PWD/BUILD_DIR.$BUILD_ARCH/packages && tar -zcvf $PWD/packages-$BUILD_ARCH-$FILE_DATE.tar.gz --exclude 'host-*' --exclude '*.stamp' *
 
 msg "Done."
 

@@ -43,18 +43,18 @@ build() {
 
   AR=ar \
     ../configure \
-    --prefix="$TOOLS" \
-    --libdir="$TOOLS/lib" \
-    --libexecdir="$TOOLS/lib" \
+    --prefix="$TOOLS_DIR" \
+    --libdir="$TOOLS_DIR/lib" \
+    --libexecdir="$TOOLS_DIR/lib" \
     --build=$XHOST \
     --host=$XHOST \
     --target=$XTARGET $GCC_OPTS \
     --with-pkgversion="Gemstone toolchain GCC version $version targeting $BUILD_ARCH" \
     --with-bugurl="https://github.com/junland/bdk/issues" \
-    --with-sysroot="$ROOTFS" \
-    --with-local-prefix="$ROOTFS" \
-    --with-native-system-header-dir="$ROOTFS/usr/include" \
-    --with-gmp=${TOOLS} --with-mpfr=${TOOLS} --with-mpc=${TOOLS} \
+    --with-sysroot="$SYSROOT_DIR" \
+    --with-local-prefix="$SYSROOT_DIR" \
+    --with-native-system-header-dir="$SYSROOT_DIR/usr/include" \
+    --with-gmp=${TOOLS_DIR} --with-mpfr=${TOOLS_DIR} --with-mpc=${TOOLS_DIR} \
     --with-isl \
     --with-system-zlib \
     --with-linker-hash-style=gnu \
@@ -90,7 +90,7 @@ build() {
 
   make -j1 install-gcc install-target-libgcc
 
-  ln -sf $XTARGET-gcc "$TOOLS"/bin/$XTARGET-cc
+  ln -sf $XTARGET-gcc "$TOOLS_DIR"/bin/$XTARGET-cc
 
   touch $PKG/empty
 }

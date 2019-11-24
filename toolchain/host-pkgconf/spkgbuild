@@ -13,19 +13,19 @@ build() {
 
   LDFLAGS="-static" \
     ./configure \
-    --prefix="$TOOLS" \
-    --with-sysroot="$ROOTFS" \
-    --with-pkg-config-dir="$ROOTFS/usr/lib/pkgconfig:$ROOTFS/usr/share/pkgconfig" \
-    --with-system-libdir="$ROOTFS/usr/lib" \
-    --with-system-includedir="$ROOTFS/usr/include"
+    --prefix="$TOOLS_DIR" \
+    --with-sysroot="$SYSROOT_DIR" \
+    --with-pkg-config-dir="$SYSROOT_DIR/usr/lib/pkgconfig:$SYSROOT_DIR/usr/share/pkgconfig" \
+    --with-system-libdir="$SYSROOT_DIR/usr/lib" \
+    --with-system-includedir="$SYSROOT_DIR/usr/include"
 
   make
 
   make install
 
-  ln -sf pkgconf "$TOOLS"/bin/pkg-config
-  ln -sf pkgconf "$TOOLS"/bin/$XTARGET-pkg-config
-  ln -sf pkgconf "$TOOLS"/bin/$XTARGET-pkgconf
+  ln -sf pkgconf "$TOOLS_DIR"/bin/pkg-config
+  ln -sf pkgconf "$TOOLS_DIR"/bin/$XTARGET-pkg-config
+  ln -sf pkgconf "$TOOLS_DIR"/bin/$XTARGET-pkgconf
 
   touch $PKG/empty
 }

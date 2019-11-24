@@ -12,7 +12,7 @@ build() {
 	./configure $BUILDFLAGS \
 		--prefix=/usr \
 		--enable-shared \
-		--with-sysroot="$ROOTFS" \
+		--with-sysroot="$SYSROOT_DIR" \
 		--enable-thread-safe
 
 	make

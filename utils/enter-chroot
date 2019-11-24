@@ -13,21 +13,21 @@ fail() {
 
 mount_chroot() {
 	msg "Mounting chroot..."
-	mount -v --bind /dev $ROOTFS/dev
-	mount -vt devpts devpts $ROOTFS/dev/pts -o gid=5,mode=620
-	mount -vt proc proc $ROOTFS/proc
-	mount -vt sysfs sysfs $ROOTFS/sys
-	mount -vt tmpfs tmpfs $ROOTFS/run
+	mount -v --bind /dev $ROOTFS_DIR/dev
+	mount -vt devpts devpts $ROOTFS_DIR/dev/pts -o gid=5,mode=620
+	mount -vt proc proc $ROOTFS_DIR/proc
+	mount -vt sysfs sysfs $ROOTFS_DIR/sys
+	mount -vt tmpfs tmpfs $ROOTFS_DIR/run
 	msg "Done mounting chroot."
 }
 
 umount_chroot() {
 	msg "Unmounting chroot..."
-	umount -v $ROOTFS/dev/pts
-	umount -v $ROOTFS/dev
-	umount -v $ROOTFS/run
-	umount -v $ROOTFS/proc
-	umount -v $ROOTFS/sys
+	umount -v $ROOTFS_DIR/dev/pts
+	umount -v $ROOTFS_DIR/dev
+	umount -v $ROOTFS_DIR/run
+	umount -v $ROOTFS_DIR/proc
+	umount -v $ROOTFS_DIR/sys
 	msg "Done unmounting chroot."
 }
 
@@ -39,11 +39,11 @@ if [ ! -d "$1" ]; then
 	fail "$1 is not a directory."
 fi
 
-ROOTFS=$1
+ROOTFS_DIR=$1
 
 mount_chroot
 
-chroot "$ROOTFS" /usr/bin/env -i \
+chroot "$ROOTFS_DIR" /usr/bin/env -i \
 	HOME=/ \
 	TERM="$TERM" \
 	LC_ALL=POSIX \

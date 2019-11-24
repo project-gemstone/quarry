@@ -15,11 +15,11 @@ build() {
   cd build
 
   ../configure \
-    --prefix="$TOOLS" \
+    --prefix="$TOOLS_DIR" \
     --target=$XTARGET \
     --with-bugurl="https://github.com/junland/bdk/issues" \
-    --with-sysroot="$ROOTFS" \
-    --with-lib-path="$ROOTFS/usr/lib" \
+    --with-sysroot="$SYSROOT_DIR" \
+    --with-lib-path="$SYSROOT_DIR/usr/lib" \
     --with-pic \
     --with-system-zlib \
     --enable-64-bit-bfd \
@@ -41,9 +41,9 @@ build() {
 
   make MAKEINFO="true" install
 
-  rm -rf "$TOOLS"/bin/$XTARGET-ld
+  rm -rf "$TOOLS_DIR"/bin/$XTARGET-ld
 
-  ln -sf $XTARGET-ld.bfd "$TOOLS"/bin/$XTARGET-ld
+  ln -sf $XTARGET-ld.bfd "$TOOLS_DIR"/bin/$XTARGET-ld
 
   touch $PKG/empty
 }

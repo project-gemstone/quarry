@@ -11,7 +11,7 @@ build() {
 
 	./configure $BUILDFLAGS \
 		--prefix=/usr \
-		--with-sysroot="$ROOTFS" \
+		--with-sysroot="$SYSROOT_DIR" \
 		--enable-cxx
 
 	make

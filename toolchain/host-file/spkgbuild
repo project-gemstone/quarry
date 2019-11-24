@@ -9,7 +9,7 @@ sha256sums=(e9c13967f7dd339a3c241b7710ba093560b9a33013491318e88e6b8b57bae07f)
 build() {
   cd "$SRC"/file-$version
 
-  ./configure --prefix="$TOOLS" --disable-seccomp
+  ./configure --prefix="$TOOLS_DIR" --disable-seccomp
 
   make
 

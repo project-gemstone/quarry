@@ -9,7 +9,7 @@ sha256sums=(6985c538143c1208dcb1ac42cedad6ff52e267b47e5f970183a3e75125b43c2e)
 build() {
   cd "$SRC"/mpc-$version
 
-  ./configure --prefix=${TOOLS} --enable-shared --with-gmp=${TOOLS} --with-mpfr=${TOOLS}
+  ./configure --prefix=${TOOLS_DIR} --enable-shared --with-gmp=${TOOLS_DIR} --with-mpfr=${TOOLS_DIR}
 
   make
 

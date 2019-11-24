@@ -20,7 +20,7 @@ build() {
 		--enable-shared \
 		--enable-static
 
-	make SHLIB_LIBS='-L$ROOTFS/usr/lib -lncurses'
+	make SHLIB_LIBS='-L$SYSROOT_DIR/usr/lib -lncurses'
 
-	make SHLIB_LIBS="-L$ROOTFS/usr/lib -lncursesw" DESTDIR="$PKG" install
+	make SHLIB_LIBS="-L$SYSROOT_DIR/usr/lib -lncursesw" DESTDIR="$PKG" install
 }

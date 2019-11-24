@@ -19,26 +19,26 @@ fail() {
 
 mount_chroot() {
 	msg "Mounting chroot..."
-	mount -v --bind /dev $ROOTFS/dev
-	mount -vt devpts devpts $ROOTFS/dev/pts -o gid=5,mode=620
-	mount -vt proc proc $ROOTFS/proc
-	mount -vt sysfs sysfs $ROOTFS/sys
-	mount -vt tmpfs tmpfs $ROOTFS/run
+	mount -v --bind /dev $ROOTFS_DIR/dev
+	mount -vt devpts devpts $ROOTFS_DIR/dev/pts -o gid=5,mode=620
+	mount -vt proc proc $ROOTFS_DIR/proc
+	mount -vt sysfs sysfs $ROOTFS_DIR/sys
+	mount -vt tmpfs tmpfs $ROOTFS_DIR/run
 	msg "Done mounting chroot."
 }
 
 umount_chroot() {
 	msg "Unmounting chroot..."
-	umount -v $ROOTFS/dev/pts || true
-	umount -v $ROOTFS/dev || true
-	umount -v $ROOTFS/run || true
-	umount -v $ROOTFS/proc || true
-	umount -v $ROOTFS/sys || true
+	umount -v $ROOTFS_DIR/dev/pts || true
+	umount -v $ROOTFS_DIR/dev || true
+	umount -v $ROOTFS_DIR/run || true
+	umount -v $ROOTFS_DIR/proc || true
+	umount -v $ROOTFS_DIR/sys || true
 	msg "Done unmounting chroot."
 }
 
 run_chroot_cmd() {
-  chroot "$ROOTFS" /usr/bin/env -i \
+  chroot "$ROOTFS_DIR" /usr/bin/env -i \
 	  HOME=/ \
 	  TERM="$TERM" \
 	  LC_ALL=POSIX \
@@ -48,18 +48,18 @@ run_chroot_cmd() {
 }
 
 qemu_system_inject() {
-  if [ "$HOST_ARCH" != "$ROOTFS_ARCH" ]; then
-      case $ROOTFS_ARCH in
+  if [ "$HOST_ARCH" != "$ROOTFS_DIR_ARCH" ]; then
+      case $ROOTFS_DIR_ARCH in
         x86_64 | x86-64)
-          msg "Copying /usr/bin/qemu-system-x86_64 to $ROOTFS"
-          cp /usr/bin/qemu-system-x86_64 $ROOTFS/usr/bin
+          msg "Copying /usr/bin/qemu-system-x86_64 to $ROOTFS_DIR"
+          cp /usr/bin/qemu-system-x86_64 $ROOTFS_DIR/usr/bin
           ;;
         aarch64 | arm64)
-          msg "Copying /usr/bin/qemu-system-aarch64 to $ROOTFS"
-          cp /usr/bin/qemu-system-aarch64 $ROOTFS/usr/bin
+          msg "Copying /usr/bin/qemu-system-aarch64 to $ROOTFS_DIR"
+          cp /usr/bin/qemu-system-aarch64 $ROOTFS_DIR/usr/bin
           ;;
         *)
-          fail "Architecture is not supported by 'stage2-build' script -- ( $ROOTFS_ARCH )"
+          fail "Architecture is not supported by 'stage2-build' script -- ( $ROOTFS_DIR_ARCH )"
           ;;
       esac
   else
@@ -88,11 +88,11 @@ if [ ! -n "$3" ]; then
 fi
 
 export REPO=$1
-export ROOTFS=$2
-export ROOTFS_ARCH=$3
+export ROOTFS_DIR=$2
+export ROOTFS_DIR_ARCH=$3
 export HOST_ARCH=$(uname -m)
 
-case $ROOTFS_ARCH in
+case $ROOTFS_DIR_ARCH in
 		x86_64)
 			msg "Setting architecture for x86_64..."
 			;;
@@ -100,7 +100,7 @@ case $ROOTFS_ARCH in
 			msg "Setting architecture for aarch64..."
 			;;
 		*)
-			fail "Architecture is not supported by 'stage2-build' script -- ( $ROOTFS_ARCH )"
+			fail "Architecture is not supported by 'stage2-build' script -- ( $ROOTFS_DIR_ARCH )"
 			;;
 esac
 
@@ -110,9 +110,9 @@ mount_chroot
 
 msg "Adding packages..."
 
-mkdir -p $ROOTFS/pkgs
+mkdir -p $ROOTFS_DIR/pkgs
 
-cp -r $REPO/* $ROOTFS/pkgs
+cp -r $REPO/* $ROOTFS_DIR/pkgs
 
 msg "Building stage 2 packages..."
 
