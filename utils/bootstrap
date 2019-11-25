@@ -126,7 +126,7 @@ gen_config() {
 			    export PACKAGES_DIR="$BUILD_DIR/packages"
 			    export ROOTFS_DIR="$BUILD_DIR/rootfs"
 			    export TOOLS_DIR="$BUILD_DIR/toolchain"
-				export SYSROOT_DIR="$BUILD/toolchain/$XTARGET/sysroot"
+			    export SYSROOT_DIR="$TOOLS_DIR/toolchain/$XTARGET/sysroot"
 			    export PATH="$PATH"
 			    export BOOTSTRAP="yes"
 			
@@ -141,8 +141,6 @@ gen_config() {
 			    export HOSTCXX="$HOSTCXX"
 			    export BUILDFLAGS="--build=$XHOST --host=$XTARGET"
 			    export TOOLFLAGS="--build=$XHOST --host=$XTARGET --target=$XTARGET"
-			    export PKG_CONFIG_PATH="$ROOTFS_DIR/usr/lib/pkgconfig:$ROOTFS_DIR/usr/share/pkgconfig"
-			    export PKG_CONFIG_SYSROOT_DIR="$ROOTFS_DIR"
 			
 			    ## target binaries
 			    export CROSS_COMPILE="$XTARGET-"
@@ -174,7 +172,7 @@ gen_config() {
 			    export PACKAGES_DIR="$BUILD_DIR/packages"
 			    export ROOTFS_DIR="$BUILD_DIR/rootfs"
 			    export TOOLS_DIR="$BUILD_DIR/toolchain"
-				export SYSROOT_DIR="$BUILD/toolchain/$XTARGET/sysroot"
+			    export SYSROOT_DIR="$TOOLS_DIR/toolchain/$XTARGET/sysroot"
 			    export BOOTSTRAP="yes"
 			
 			    ## build variables
@@ -279,7 +277,7 @@ build_toolchain() {
 
 	mkdir -vp "$TOOLS_DIR"/bin && touch "$TOOLS_DIR"/bin/ldconfig && chmod +x "$TOOLS_DIR"/bin/ldconfig
 
-	for pkg in host-info host-linux-api-headers host-binutils host-gcc-static host-glibc host-gcc host-file host-pkgconf host-m4; do
+	for pkg in host-info host-linux-api-headers host-binutils host-gcc-static host-glibc host-gcc host-file host-m4; do
 		case $pkg in
 			*)
 				pkgbuild-toolchain $pkg
