@@ -9,6 +9,10 @@ sha256sums=(0ab6c55dd86a92ed561972ba15b9b70a8b9f75557f896446c82e8b36e473ee04)
 build() {
 
   cd "$SRC"/binutils-$version
+  
+  case "$BUILD_ARCH" in
+		amd64 | x86_64)	ARCHCONFIG="--enable-targets=x86_64-pep"	;;
+	esac
 
   mkdir -v build
 
@@ -16,10 +20,10 @@ build() {
 
   ../configure \
     --prefix="$TOOLS_DIR" \
-    --target=$XTARGET \
-    --with-bugurl="https://github.com/junland/bdk/issues" \
+    --target=$XTARGET $ARCHCONFIG \
+    --with-bugurl="https://github.com/project-gemstone/openbdk/issues" \
     --with-sysroot="$SYSROOT_DIR" \
-    --with-lib-path="$SYSROOT_DIR/usr/lib" \
+    --enable-default-hash-style=sysv \
     --with-pic \
     --with-system-zlib \
     --enable-64-bit-bfd \
@@ -30,6 +34,7 @@ build() {
     --enable-plugins \
     --enable-relro \
     --enable-threads \
+    --disable-doc \
     --disable-compressed-debug-sections \
     --disable-multilib \
     --disable-nls \

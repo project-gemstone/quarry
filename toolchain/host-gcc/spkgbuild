@@ -7,17 +7,18 @@ gmp_version=6.1.2
 mpc_version=1.1.0
 mpfr_version=4.0.2
 release=1
-source=("https://ftp.gnu.org/gnu/gcc/gcc-$version/gcc-$version.tar.xz" 
-        "https://ftp.gnu.org/gnu/gmp/gmp-$gmp_version.tar.xz"
-        "https://ftp.gnu.org/gnu/mpc/mpc-$mpc_version.tar.gz"
+source=("http://ftpmirror.gnu.org/gnu/gcc/gcc-$version/gcc-$version.tar.xz" 
+        "http://ftp.gnu.org/gnu/gmp/gmp-$gmp_version.tar.xz"
+        "http://ftp.gnu.org/gnu/mpc/mpc-$mpc_version.tar.gz"
         "http://www.mpfr.org/mpfr-$mpfr_version/mpfr-$mpfr_version.tar.xz"
-        "http://isl.gforge.inria.fr/isl-$isl_version.tar.xz")
+        "http://isl.gforge.inria.fr/isl-$isl_version.tar.xz"
+        "gcc-pure64.patch")
 sha256sums=('ea6ef08f121239da5695f76c9b33637a118dcf63e24164422231917fa61fb206'
             '87b565e89a9a684fe4ebeeddb8399dce2599f9c9049854ca8c0dfbdea0e21912'
             '6985c538143c1208dcb1ac42cedad6ff52e267b47e5f970183a3e75125b43c2e'
             '1d3be708604eae0e42d578ba93b390c2a145f17743a744d8f3f8c2ad5855a38a'
-            '777058852a3db9500954361e294881214f6ecd4b594c00da5eee974cd6a54960')
-
+            '777058852a3db9500954361e294881214f6ecd4b594c00da5eee974cd6a54960'
+            'd7020f38d6c81ee4e537bc0a4f9498b067326ac30f80be5865d33cf146e2c59d')
 
 build() {
   if [ -z "$GCC_OPTS" ]; then
@@ -45,8 +46,12 @@ build() {
   export LDFLAGS_FOR_TARGET=" "
 
   cd "$SRC"/gcc-$version
+  
+  cat gcc/limitx.h gcc/glimits.h gcc/limity.h > `dirname $(${TOOLS}/bin/${XTARGET}-gcc -print-libgcc-file-name)`/include-fixed/limits.h
 
   sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
+  
+  patch -Np1 -i ../gcc-pure64.patch
 
   mv ../gmp-$gmp_version gmp
   mv ../mpfr-$mpfr_version mpfr
@@ -63,8 +68,9 @@ build() {
     --build=$XHOST \
     --host=$XHOST \
     --target=$XTARGET $GCC_OPTS \
-    --with-pkgversion="BDK GCC version $version targeting $BUILD_ARCH" \
-    --with-bugurl="https://github.com/junland/bdk/issues" \
+    --with-pkgversion="openBDK GCC version $version targeting $BUILD_ARCH" \
+    --with-bugurl="https://github.com/project-gemstone/openbdk/issues" \
+    --with-build-time-tools="$TOOLS_DIR\bin" \
     --with-sysroot="$SYSROOT_DIR" \
     --with-local-prefix="$SYSROOT_DIR" \
     --with-native-system-header-dir="/usr/include" \
@@ -91,15 +97,14 @@ build() {
     --disable-multilib \
     --disable-nls \
     --disable-symvers \
-    --disable-werror
+    --disable-werror \
+    --disable-doc
 
   make -j1 AS_FOR_TARGET="$XTARGET-as" LD_FOR_TARGET="$XTARGET-ld"
 
   make -j1 install
 
   ln -sf $XTARGET-gcc "$TOOLS_DIR"/bin/$XTARGET-cc
-  
-  ln -sv $XTARGET-gcc "$TOOLS_DIR"/bin/cc
 
   touch $PKG/empty
 }

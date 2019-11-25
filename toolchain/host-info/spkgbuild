@@ -11,7 +11,7 @@ build() {
   env
 
   env >$TOOLS_DIR/toolchain.env
-
+  
   echo "TOOLCHAIN_VERSION=$version" >$TOOLS_DIR/toolchain.version
 
   touch $PKG/empty
