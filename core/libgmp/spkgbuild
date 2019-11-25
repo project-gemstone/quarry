@@ -9,10 +9,7 @@ sha256sums=(87b565e89a9a684fe4ebeeddb8399dce2599f9c9049854ca8c0dfbdea0e21912)
 build() {
 	cd "$SRC"/gmp-$version
 
-	./configure $BUILDFLAGS \
-		--prefix=/usr \
-		--with-sysroot="$SYSROOT_DIR" \
-		--enable-cxx
+	./configure $BUILDFLAGS --prefix=/usr --enable-cxx
 
 	make
 
