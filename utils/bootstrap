@@ -47,7 +47,7 @@ setup_env() {
 	export PACKAGES_DIR="$BUILD_DIR/packages"
 	export ROOTFS_DIR="$BUILD_DIR/rootfs"
 	export TOOLS_DIR="$BUILD_DIR/toolchain"
-	export SYSROOT_DIR="$TOOLS_DIR/$XTARGET"
+	export SYSROOT_DIR="$TOOLS_DIR/$XTARGET/sysroot"
 	export ARTIFACTS_DIR="$BUILD_DIR/artifacts"
 
 	## GEMSTONE variables
@@ -310,7 +310,7 @@ build_chroot() {
 	for pkg in filesystem zlib diffutils tar libgmp libmpfr libmpc binutils gcc gawk file ncurses bzip2 libelf attr acl expat libressl ca-certificates xz lz4 zstd m4 bison bc binutils make sed grep bash coreutils gzip findutils patch scratchpkg pkgconf perl autoconf automake libtool c-ares libev nghttp2 libssh2 curl libarchive readline cpio libcap-ng gperf kmod eudev; do
 		case $pkg in
 		    zlib | expat | libressl | libarchive | libelf | libgmp | libmpfr | libmpc)
-			    pkgbuild-target $pkg $ROOTFS_DIR
+			        pkgbuild-target $pkg $ROOTFS_DIR
 				pkginstall $pkg $SYSROOT_DIR
 				;;
 			*)
