@@ -268,7 +268,7 @@ pkginstall() {
 
 	PKG_NAME=$(ls $PACKAGES | grep "^$1-[[:digit:]]")
 
-	cd $PACKAGES && pkgadd $PKG_NAME --verbose --no-ld-config --root=$2
+	cd $PACKAGES_DIR && pkgadd $PKG_NAME --verbose --no-ld-config --root=$2
 }
 
 # Build the toolchain. (Run first.)
