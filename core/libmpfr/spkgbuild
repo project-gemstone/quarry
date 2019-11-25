@@ -9,10 +9,7 @@ sha256sums=(1d3be708604eae0e42d578ba93b390c2a145f17743a744d8f3f8c2ad5855a38a)
 build() {
 	cd "$SRC"/mpfr-$version
 
-	./configure $BUILDFLAGS \
-		--prefix=/usr \
-		--enable-shared \
-		--enable-thread-safe
+	./configure $BUILDFLAGS --prefix=/usr --enable-shared --enable-thread-safe
 
 	make
 
