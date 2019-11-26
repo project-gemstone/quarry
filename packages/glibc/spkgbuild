@@ -28,8 +28,8 @@ build() {
 	      --build=$XHOST \
 	      --host=$XTARGET \
 	      --target=$XTARGET \
-	      --with-pkgversion="openBDK glibc $version" \
-	      --with-bugurl='https://github.com/project-gemstone/openbdk/issues' \
+              --with-pkgversion="Gemstone Linux $version targeting $BUILD_ARCH" \
+              --with-bugurl="https://github.com/project-gemstone/gemstone/issues" \
 	      --without-gd \
 	      --without-selinux \
 	      --enable-add-ons \
