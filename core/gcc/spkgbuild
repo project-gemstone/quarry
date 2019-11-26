@@ -121,6 +121,8 @@ build() {
 		ln -sf g++-gcc-$version $XTARGET-c++
 		ln -sf g++-gcc-$version $XTARGET-g++
 	)
-	
+
+	#cat gcc/limitx.h gcc/glimits.h gcc/limity.h > `dirname $(${TOOLS}/bin/${XTARGET}-gcc -print-libgcc-file-name)`/include-fixed/limits.h
+
 	mv $PKG/usr/lib/gcc/*/$version/include-fixed/{limits.h,syslimits.h} $PKG/usr/lib/gcc/*/$version/include/
 }
