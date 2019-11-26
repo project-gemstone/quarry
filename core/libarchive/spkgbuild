@@ -15,13 +15,13 @@ build() {
 	#sed -e "s|-rpath \$(libdir)|-rpath $ROOTFS_DIR/usr/lib|g" -e "s|\$(libarchive_la_LIBADD) \$(LIBS)|-L$ROOTFS_DIR/usr/lib|g" -i Makefile.in
 
 	./configure $BUILDFLAGS \
-		--with-sysroot=$SYSROOT_DIR \
+		--with-sysroot=$ROOTFS_DIR \
 		--prefix=/usr \
 		--without-nettle \
 		--disable-static \
 		--without-xml2
 
-	#sed "s|lt_sysroot=|lt_sysroot=$SYSROOT_DIR|g" -i libtool
+	#sed "s|lt_sysroot=|lt_sysroot=$ROOTFS_DIR|g" -i libtool
 
 	make
 

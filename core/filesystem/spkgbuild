@@ -38,11 +38,11 @@ build() {
 
 	install -d -m555 proc
 	install -d -m555 sys
-	install -d -m0750 home/root
+	install -d -m0750 home
 	install -d -m1777 tmp
 	install -d -m555 -g 11 srv/ftp
 
-	ln -sf home/root root
+	install -d -m0750 root
 
 	ln -sf ../proc/mounts etc/mtab
 
@@ -75,6 +75,8 @@ build() {
 	ln -sf usr/bin sbin
 	ln -sf bin usr/sbin
 	ln -sf usr/lib lib
+	
+	## Need to fix this, we only want to use /lib 
 	ln -sf usr/lib lib64
 
 	for d in bin etc games include lib man sbin share src; do
