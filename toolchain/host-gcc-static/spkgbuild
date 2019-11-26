@@ -66,8 +66,8 @@ build() {
     --build=$XHOST \
     --host=$XHOST \
     --target=$XTARGET $GCC_OPTS \
-    --with-pkgversion="openBDK GCC version $version targeting $BUILD_ARCH" \
-    --with-bugurl="https://github.com/project-gemstone/openbdk/issues" \
+    --with-pkgversion="Gemstone Linux $version targeting $BUILD_ARCH" \
+    --with-bugurl="https://github.com/project-gemstone/gemstone/issues" \
     --with-sysroot="$SYSROOT_DIR" \
     --with-local-prefix="$SYSROOT_DIR" \
     --with-native-system-header-dir="$SYSROOT_DIR/usr/include" \
