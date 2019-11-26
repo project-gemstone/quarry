@@ -50,7 +50,7 @@ setup_env() {
 
 	## BDK variables
 	export BDK="$(pwd)"
-	export BDK_PACKAGES="$BDK/packages"
+	export BDK_PACKAGES="$BDK/core"
 	export BDK_TOOLS="$BDK/toolchain"
 	export BDK_UTILS="$BDK/utils"
 
