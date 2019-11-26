@@ -38,13 +38,19 @@ umount_chroot() {
 }
 
 run_chroot_cmd() {
+  if [ -f $ROOTFS_DIR/bin/bash ];
+     export ROOTFS_SHELL=/bin/bash
+  else
+     export ROOTFS_SHELL=/bin/ash
+  fi
+
   chroot "$ROOTFS_DIR" /usr/bin/env -i \
 	  HOME=/ \
 	  TERM="$TERM" \
 	  LC_ALL=POSIX \
 	  MAKEFLAGS="-j2" \
 	  PS1='(chroot)$ ' \
-	  PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/bash +h -c "$1"
+	  PATH=/bin:/usr/bin:/sbin:/usr/sbin $ROOTFS_SHELL +h -c "$1"
 }
 
 qemu_system_inject() {
@@ -108,6 +114,12 @@ qemu_system_inject
 
 mount_chroot
 
+msg "Testing rootfs first..."
+
+curl https://raw.githubusercontent.com/junland/openbdk-ng/testing/files/test.c > $ROOTFS_DIR/test.c
+
+run_chroot_cmd "cd / && gcc test.c -o test"
+
 msg "Adding packages..."
 
 mkdir -p $ROOTFS_DIR/pkgs
@@ -119,8 +131,8 @@ msg "Building stage 2 packages..."
 for pkg in libcap-ng gperf kmod eudev; do
 	case $pkg in
 		*)
-      run_chroot_cmd "cd /pkgs/$pkg && pkgbuild --verbose --skip-shasum"
-      run_chroot_cmd "cd /var/cache/scratchpkg/packages && pkgadd $pkg*.spkg.tar.xz --verbose --no-ld-config"
+                        run_chroot_cmd "cd /pkgs/$pkg && pkgbuild --verbose --skip-shasum"
+                        run_chroot_cmd "cd /var/cache/scratchpkg/packages && pkgadd $pkg*.spkg.tar.xz --verbose --no-ld-config"
 			;;
 	esac
 done
