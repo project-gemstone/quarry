@@ -47,6 +47,8 @@ build() {
 
   cd "$SRC"/gcc-$version
   
+  cat gcc/limitx.h gcc/glimits.h gcc/limity.h > `dirname $(${TOOLS}/bin/${XTARGET}-gcc -print-libgcc-file-name)`/include-fixed/limits.h
+
   sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
   
   patch -Np1 -i ../gcc-pure64.patch
@@ -60,15 +62,15 @@ build() {
 
   AR=ar \
     ../configure \
-    --prefix="$TOOLS_DIR" \
-    --libdir="$TOOLS_DIR/lib" \
-    --libexecdir="$TOOLS_DIR/lib" \
+    --prefix="$TOOLS" \
+    --libdir="$TOOLS/lib" \
+    --libexecdir="$TOOLS/lib" \
     --build=$XHOST \
     --host=$XHOST \
     --target=$XTARGET $GCC_OPTS \
     --with-pkgversion="openBDK GCC version $version targeting $BUILD_ARCH" \
     --with-bugurl="https://github.com/project-gemstone/openbdk/issues" \
-    --with-build-time-tools="$TOOLS_DIR\bin" \
+    --with-build-time-tools="$TOOLS\bin" \
     --with-sysroot="$SYSROOT_DIR" \
     --with-local-prefix="$SYSROOT_DIR" \
     --with-native-system-header-dir="/usr/include" \
@@ -102,7 +104,7 @@ build() {
 
   make -j1 install
 
-  ln -sf $XTARGET-gcc "$TOOLS_DIR"/bin/$XTARGET-cc
+  ln -sf $XTARGET-gcc "$TOOLS"/bin/$XTARGET-cc
 
   touch $PKG/empty
 }

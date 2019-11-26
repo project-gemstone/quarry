@@ -4,6 +4,8 @@ set -e
 
 set +h
 
+umask 022
+
 msg() {
 	printf '[\033[32m INFO\033[m ] %s\n' "$@"
 }
@@ -50,7 +52,7 @@ setup_env() {
 
 	## BDK variables
 	export BDK="$(pwd)"
-	export BDK_PACKAGES="$BDK/core"
+	export BDK_PACKAGES="$BDK/packages"
 	export BDK_TOOLS="$BDK/toolchain"
 	export BDK_UTILS="$BDK/utils"
 
@@ -350,14 +352,6 @@ if [ "$UID" != 0 ]; then
 	fail "Bootstrap process can only be run as root."
 fi
 
-if ! command -v pkgbuild >/dev/null; then
-	fail "The 'pkgbuild' was not detected in your PATH, please adjust your path or install 'scratchpkg' on your system to use this script..."
-fi
-
-if ! command -v pkgadd >/dev/null; then
-	fail "The 'pkgadd' was not detected in your PATH, please adjust your path or install 'scratchpkg' on your system to use this script..."
-fi
-
 if [ $# -gt 1 ]; then
 	fail "Passing way too many parameters for the bootstrap command. Pass either no paramters, 'toolchain', or 'chroot' to use this command."
 fi
@@ -385,32 +379,32 @@ if [ "$1" == "" ]; then
 fi
 
 if [ "$PACKAGE_ALL" = "yes" ]; then
-    msg "Packing up packages and root filesystem."
+        msg "Packing up packages and root filesystem."
 
 	FILE_DATE=$(date +%Y%m%d_%H%M%S)
 
 	msg "Packing packages..."
 
-	cd $PACKAGES_DIR && tar -zcvf $ARTIFACTS_DIR/packages-stage1-$BUILD_ARCH-$FILE_DATE.tar.gz --exclude 'host-*' --exclude '*.stamp' *
+	cd $PACKAGES && tar -zcvf $ARTIFACTS/packages-$BUILD_ARCH-$FILE_DATE.tar.gz --exclude 'host-*' --exclude '*.stamp' *
 
 	msg "Setting up temp rootfs..."
 
-	for pkg in filesystem linux-api-headers glibc diffutils zlib tar libgmp libmpfr libmpc binutils gcc gawk file ncurses bzip2 libelf attr acl expat libressl ca-certificates xz lz4 zstd m4 bison bc binutils make sed grep bash coreutils gzip findutils patch scratchpkg pkgconf perl autoconf automake libtool c-ares libev nghttp2 libssh2 curl libarchive cpio libcap-ng gperf kmod eudev; do
+	for pkg in filesystem linux-api-headers glibc zlib libgmp libmpfr libmpc gcc libelf expat libressl libarchive busybox; do
 		case $pkg in
 			*)
-				PKG_NAME=$(ls $PACKAGES_DIR | grep "^$pkg-[[:digit:]]")
-				cd $PACKAGES_DIR && pkgadd $PKG_NAME --verbose --no-ld-config --root=$ARTIFACTS_DIR/rootfs
+				PKG_NAME=$(ls $PACKAGES | grep "^$pkg-[[:digit:]]")
+				cd $PACKAGES && pkgadd $PKG_NAME --verbose --no-ld-config --root=$ARTIFACTS/rootfs
 				;;
 		esac
 	done
 
 	msg "Packing rootfs..."
 
-	cd $ARTIFACTS_DIR/rootfs && tar -zcvf $ARTIFACTS_DIR/rootfs-stage1-$BUILD_ARCH-$FILE_DATE.tar.gz *
+	cd $ARTIFACTS/rootfs && tar -zcvf $ARTIFACTS/rootfs-$BUILD_ARCH-$FILE_DATE.tar.gz *
 
 	msg "Removing temp rootfs"
 
-	rm -rf $ARTIFACTS_DIR/rootfs
+	rm -rf $ARTIFACTS/rootfs
 fi
 
 msg "And thats it... Have fun!"
