@@ -15,7 +15,6 @@ build() {
 	#sed -e "s|-rpath \$(libdir)|-rpath $ROOTFS_DIR/usr/lib|g" -e "s|\$(libarchive_la_LIBADD) \$(LIBS)|-L$ROOTFS_DIR/usr/lib|g" -i Makefile.in
 
 	./configure $BUILDFLAGS \
-		--with-sysroot=$ROOTFS_DIR \
 		--prefix=/usr \
 		--without-nettle \
 		--disable-static \
