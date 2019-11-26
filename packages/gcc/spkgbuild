@@ -60,8 +60,8 @@ build() {
 		--with-linker-hash-style=gnu \
 		--libdir=/usr/lib \
 		--libexecdir=/usr/lib \
-		--with-pkgversion="openBDK Linux" \
-		--with-bugurl="https://github.com/junland/bdk/issues" \
+                --with-pkgversion="Gemstone Linux $version targeting $BUILD_ARCH" \
+                --with-bugurl="https://github.com/project-gemstone/gemstone/issues" \
 		--with-isl \
 		--with-system-zlib \
 		--enable-__cxa_atexit \
