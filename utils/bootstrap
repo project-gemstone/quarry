@@ -43,22 +43,22 @@ setup_env() {
 	export HOST_ARCH=$(echo $MACHTYPE | sed 's/-.*//')
 	export QEMU_BIN=$(which $QEMUARCH)
 	export CWD="$(pwd)"
-	export BUILD="$CWD/BUILD.$BUILD_ARCH"
-	export PACKAGES="$BUILD/packages"
-	export ROOTFS_DIR="$BUILD/rootfs"
-	export SYSROOT_DIR="$BUILD/toolchain/$XTARGET/sysroot"
+	export BUILD_DIR="$CWD/BUILD.$BUILD_ARCH"
+	export PACKAGES="$BUILD_DIR/packages"
+	export ROOTFS_DIR="$BUILD_DIR/rootfs"
+	export SYSROOT_DIR="$BUILD_DIR/toolchain/$XTARGET/sysroot"
 	export TOOLS="$BUILD/toolchain"
-	export ARTIFACTS="$BUILD/artifacts"
+	export ARTIFACTS="$BUILD_DIR/artifacts"
 
-	## BDK variables
-	export BDK="$(pwd)"
-	export BDK_PACKAGES="$BDK/packages"
-	export BDK_TOOLS="$BDK/toolchain"
-	export BDK_UTILS="$BDK/utils"
+	## REPO variables
+	export REPO="$(pwd)"
+	export REPO_PACKAGES="$REPO/packages"
+	export REPO_TOOLS="$REPO/toolchain"
+	export REPO_UTILS="$REPO/utils"
 
 	## compiler variables
 	export LC_ALL="POSIX"
-	export PATH="$BDK_UTILS:$TOOLS/bin:$TOOLS/bin:$PATH"
+	export PATH="$REPO_UTILS:$TOOLS/bin:$TOOLS/bin:$PATH"
 	export ORIGMAKE="$(which make)"
 	export CFLAGS="-g0 -Os -s -pipe"
 	export CXXFLAGS="$CFLAGS"
@@ -75,15 +75,15 @@ setup_env() {
 
 	msg "Preparing the environment for build..."
 
-	mkdir -vp "$BUILD" "$PACKAGES" "$ROOTFS_DIR" "$TOOLS" "$ARTIFACTS"
+	mkdir -vp "$BUILD_DIR" "$PACKAGES" "$ROOTFS_DIR" "$TOOLS" "$ARTIFACTS"
 
 	mkdir -p $ARTIFACTS/rootfs
 	
 	mkdir -p $ARTIFACTS/rootfs/var/lib/scratchpkg/index
 
-	gen_config host "$BUILD"/host.conf
+	gen_config host "$BUILD_DIR"/host.conf
 
-	gen_config target "$BUILD"/target.conf
+	gen_config target "$BUILD_DIR"/target.conf
 
 	msg "Setting package index..."
 
@@ -105,13 +105,13 @@ setup_env() {
 
 	mkdir -vp $ROOTFS_DIR/var/cache/scratchpkg/log
 
-	msg "Backing up env to $BUILD/build.env"
+	msg "Backing up env to $BUILD_DIR/build.env"
 
-	env >$BUILD/build.env
+	env >$BUILD_DIR/build.env
 
 	msg "Adding export command to env file"
 
-	sed -i 's/^/export /' $BUILD/build.env
+	sed -i 's/^/export /' $BUILD_DIR/build.env
 	
 	msg "Adding fake ldconfig"
 	
@@ -137,10 +137,10 @@ gen_config() {
 			    export XTARGET="$XTARGET"
 			    export TOOLS="$TOOLS"
 			    export PKGDEST="$PACKAGES"
-			    export PACKAGES="$BUILD/packages"
-			    export ROOTFS_DIR="$BUILD/rootfs"
-			    export SYSROOT_DIR="$BUILD/toolchain/$XTARGET/sysroot"
-			    export TOOLS="$BUILD/toolchain"
+			    export PACKAGES="$BUILD_DIR/packages"
+			    export ROOTFS_DIR="$BUILD_DIR/rootfs"
+			    export SYSROOT_DIR="$BUILD_DIR/toolchain/$XTARGET/sysroot"
+			    export TOOLS="$BUILD_DIR/toolchain"
 			    export PATH="$PATH"
 			    export BOOTSTRAP="yes"
 			
@@ -190,10 +190,10 @@ gen_config() {
 			    export TOOLS="$TOOLS"
 			    export PKGDEST="$PACKAGES"
 			    export PATH="$PATH"
-			    export PACKAGES="$BUILD/packages"
-			    export ROOTFS_DIR="$BUILD/rootfs"
-			    export SYSROOT_DIR="$BUILD/toolchain/$XTARGET/sysroot"
-			    export TOOLS="$BUILD/toolchain"
+			    export PACKAGES="$BUILD_DIR/packages"
+			    export ROOTFS_DIR="$BUILD_DIR/rootfs"
+			    export SYSROOT_DIR="$BUILD_DIR/toolchain/$XTARGET/sysroot"
+			    export TOOLS="$BUILD_DIR/toolchain"
 			    export BOOTSTRAP="yes"
 			
 			    ## build variables
@@ -229,7 +229,7 @@ pkgbuild-toolchain() {
 
 	msg "Building $1 for toolchain using host config..."
 
-	cd $BDK_TOOLS/$1 && pkgbuild --verbose --config=$BUILD/host.conf
+	cd $REPO_TOOLS/$1 && pkgbuild --verbose --config=$BUILD_DIR/host.conf
 
 	echo "$1" >$PACKAGES/.$1.stamp
 }
@@ -246,7 +246,7 @@ pkgbuild-target() {
 
 	msg "Building $1 using target config..."
 
-	cd $BDK_PACKAGES/$1 && pkgbuild --verbose --skip-shasum --config=$BUILD/target.conf
+	cd $REPO_PACKAGES/$1 && pkgbuild --verbose --skip-shasum --config=$BUILD_DIR/target.conf
 
 	msg "Installing $1 into $2"
 
@@ -269,7 +269,7 @@ pkgbuild-host() {
 
 	msg "Building $1 using host config..."
 
-	cd $BDK_PACKAGES/$1 && pkgbuild --verbose --skip-shasum --config=$BUILD/host.conf
+	cd $REPO_PACKAGES/$1 && pkgbuild --verbose --skip-shasum --config=$BUILD_DIR/host.conf
 
 	msg "Installing $1 into $2"
 
