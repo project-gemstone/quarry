@@ -1,0 +1,58 @@
+# description	: Common CA certificates PEM files
+
+name=ca-certificates
+version=20190110
+release=1
+source=("http://deb.debian.org/debian/pool/main/c/ca-certificates/ca-certificates_${version}.tar.xz" certdata2pem.c c_rehash.c)
+sha256sums=('ee4bf0f4c6398005f5b5ca4e0b87b82837ac5c3b0280a1cb3a63c47555c3a675'
+	       '064f7d41106cd9efa08b9e68cf049f44e3be55666bd2ab96d02c508293b8dce7'
+	       'ec3e932e75feb0baa8d57f03af2793a94f072e5270419cf9ce0dfcc7f7534852')
+
+build() {
+	mkdir -p "$PKG"/usr/bin
+
+	cd "$SRC"/$name-$version
+	HOSTCC=${HOSTCC:-cc}
+
+	cat >sbin/Makefile <<EOF
+install:
+	install -Dm755 update-ca-certificates \$(DESTDIR)\$(SBINDIR)/update-ca-certificates
+EOF
+
+	cp ../certdata2pem.c mozilla/certdata2pem.c
+
+	cat >mozilla/Makefile <<EOF
+all:
+	$HOSTCC -Wall certdata2pem.c -o certdata2pem
+	./certdata2pem
+clean:
+	-rm -f *.crt
+install:
+	for p in *.crt; do \
+	    install -Dm0644 \$\$p \$(CERTSDIR)/\$\$p ; \
+	done
+EOF
+
+	make
+
+	${CROSS_COMPILE}cc ../c_rehash.c -o "$PKG"/usr/bin/c_rehash -lssl -lcrypto -lz $CFLAGS
+
+	make DESTDIR="$PKG" SBINDIR=/usr/bin install
+
+	mkdir -p "$PKG"/etc/ssl/certs
+	find "$PKG"/usr/share/${name}/ -name '*.crt' |
+		rev | cut -d/ -f1-2 | rev | sort >"$PKG"/etc/ca-certificates.conf
+
+	cat "$PKG"/usr/share/ca-certificates/*/*.crt >"$PKG"/etc/ssl/certs/ca-certificates.crt
+
+	cd "$PKG"
+	for i in etc/ssl/certs/*; do
+		test ! -L "$i" && continue
+		s=$(readlink "$i")
+		p=$(printf "%s" "$s" | awk '{n=split($0, a, "/share"); if(n>1)print a[n];}')
+		if test -n "$p"; then
+			nl=$(printf "../../../share%s" "$p")
+			ln -sf "$nl" "$i"
+		fi
+	done
+}

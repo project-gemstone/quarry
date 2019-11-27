@@ -1,0 +1,21 @@
+# description	: File type identification utility
+
+name=file
+version=5.37
+release=1
+source=("ftp://ftp.astron.com/pub/$name/$name-$version.tar.gz")
+sha256sums=('e9c13967f7dd339a3c241b7710ba093560b9a33013491318e88e6b8b57bae07f')
+
+build() {
+	cd "$SRC"/$name-$version
+
+	./configure $BUILDFLAGS \
+		--prefix=/usr \
+		--datadir=/usr/share/file \
+		--enable-fsect-man5 \
+		--disable-libseccomp
+
+	make
+
+	make DESTDIR="$PKG" install
+}

@@ -1,0 +1,35 @@
+# description	: A popular data compression program
+
+name=gzip
+version=1.10
+release=1
+source=(http://ftpmirror.gnu.org/gnu/$name/$name-$version.tar.gz)
+sha256sums=(c91f74430bf7bc20402e1f657d0b252cb80aa66ba333a25704512af346633c68)
+
+build() {
+	cd $name-$version
+
+	./configure $BUILDFLAGS --prefix=/usr
+
+	make
+
+	make DESTDIR=$PKG install
+
+	install -d $PKG/bin
+
+	mv $PKG/usr/bin/{gzip,gunzip,zcat} $PKG/bin
+
+	rm $PKG/usr/share/man/man1/{gunzip.1,zcat.1,zcmp.1}
+
+	ln -sf gzip.1.gz $PKG/usr/share/man/man1/gunzip.1.gz
+
+	ln -sf gzip.1.gz $PKG/usr/share/man/man1/zcat.1.gz
+
+	ln -sf zdiff.1.gz $PKG/usr/share/man/man1/zcmp.1.gz
+
+	rm $PKG/usr/bin/uncompress
+
+	ln -s /bin/gunzip $PKG/usr/bin/uncompress
+
+	rm -r $PKG/usr/share/info
+}

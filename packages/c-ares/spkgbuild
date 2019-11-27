@@ -1,0 +1,19 @@
+# description	: An asynchronously DNS/names resolver library
+
+name=c-ares
+version=1.15.0
+release=1
+source=("https://c-ares.haxx.se/download/$name-$version.tar.gz")
+sha256sums=('6cdb97871f2930530c97deb7cf5c8fa4be5a0b02c7cea6e7c7667672a39d6852')
+
+build() {
+	cd "$SRC"/$name-$version
+
+	./configure $BUILDFLAGS \
+		--prefix=/usr \
+		--enable-shared
+
+	make
+
+	make DESTDIR="$PKG" install
+}

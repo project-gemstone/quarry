@@ -1,0 +1,24 @@
+# description	: GNU make utility to maintain groups of programs
+
+name=make
+version=4.2.1
+release=1
+source=("http://ftp.gnu.org/gnu/$name/$name-$version.tar.bz2")
+sha256sums=(d6e262bf3601b42d2b1e4ef8310029e1dcf20083c5446b4b7aa67081fdffc589)
+
+build() {
+	cd "$SRC"/$name-$version
+
+	sed -i '211,217 d; 219,229 d; 232 d' glob/glob.c
+
+	./configure $BUILDFLAGS \
+		--prefix=/usr \
+		--without-guile \
+		--without-dmalloc
+
+	make
+
+	make DESTDIR="$PKG" install
+
+	ln -sf make "$PKG"/usr/bin/gmake
+}

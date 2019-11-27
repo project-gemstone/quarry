@@ -1,0 +1,15 @@
+# description	: Ref. package builder and package manager.
+
+name=scratchpkg
+version=1.0.1
+release=1
+source=("https://github.com/project-gemstone/$name/archive/$version.tar.gz")
+
+
+build() {
+	cd "$SRC"/$name-$version
+
+	chmod +x ./INSTALL.sh
+
+	DESTDIR=$PKG ./INSTALL.sh
+}
