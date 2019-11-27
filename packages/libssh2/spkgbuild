@@ -11,7 +11,6 @@ build() {
 
 	./configure $BUILDFLAGS \
 		--prefix=/usr \
-		--with-sysroot=$SYSROOT_DIR \
 		--with-libssl-prefix="$SYSROOT_DIR"/usr
 
 	make

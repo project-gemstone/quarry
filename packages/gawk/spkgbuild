@@ -13,7 +13,6 @@ build() {
 		--prefix=/usr \
 		--libexecdir=/usr/lib \
 		--sysconfdir=/etc \
-		--with-sysroot=$SYSROOT_DIR \
 		--without-libsigsegv
 
 	make
