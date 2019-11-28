@@ -62,15 +62,15 @@ build() {
 
   AR=ar \
     ../configure \
-    --prefix="$TOOLS" \
-    --libdir="$TOOLS/lib" \
-    --libexecdir="$TOOLS/lib" \
+    --prefix="$TOOLS_DIR" \
+    --libdir="$TOOLS_DIR/lib" \
+    --libexecdir="$TOOLS_DIR/lib" \
     --build=$XHOST \
     --host=$XHOST \
     --target=$XTARGET $GCC_OPTS \
     --with-pkgversion="Gemstone Linux $version targeting $BUILD_ARCH" \
     --with-bugurl="https://github.com/project-gemstone/gemstone/issues" \
-    --with-build-time-tools="$TOOLS\bin" \
+    --with-build-time-tools="$TOOLS_DIR\bin" \
     --with-sysroot="$SYSROOT_DIR" \
     --with-local-prefix="$SYSROOT_DIR" \
     --with-native-system-header-dir="/usr/include" \
@@ -104,9 +104,9 @@ build() {
 
   make -j1 install
 
-  ln -sf $XTARGET-gcc "$TOOLS"/bin/$XTARGET-cc
+  ln -sf $XTARGET-gcc "$TOOLS_DIR"/bin/$XTARGET-cc
   
-  ln -sv $XTARGET-gcc "$TOOLS"/bin/cc
+  ln -sv $XTARGET-gcc "$TOOLS_DIR"/bin/cc
 
   touch $PKG/empty
 }

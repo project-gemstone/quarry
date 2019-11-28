@@ -60,9 +60,9 @@ build() {
  
   AR=ar \
     ../configure \
-    --prefix="$TOOLS" \
-    --libdir="$TOOLS/lib" \
-    --libexecdir="$TOOLS/lib" \
+    --prefix="$TOOLS_DIR" \
+    --libdir="$TOOLS_DIR/lib" \
+    --libexecdir="$TOOLS_DIR/lib" \
     --build=$XHOST \
     --host=$XHOST \
     --target=$XTARGET $GCC_OPTS \
@@ -107,7 +107,7 @@ build() {
 
   make -j1 install-gcc install-target-libgcc
 
-  ln -sf $XTARGET-gcc "$TOOLS"/bin/$XTARGET-cc
+  ln -sf $XTARGET-gcc "$TOOLS_DIR"/bin/$XTARGET-cc
 
   touch $PKG/empty
 }

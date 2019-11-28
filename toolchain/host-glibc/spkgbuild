@@ -26,7 +26,7 @@ build() {
 	      --libdir=/usr/lib \
 	      --libexecdir=/usr/lib \
               --with-headers=$SYSROOT_DIR/usr/include \
-              --with-binutils=$TOOLS/bin \
+              --with-binutils=$TOOLS_DIR/bin \
 	      --build=$XHOST \
 	      --host=$XTARGET \
 	      --target=$XTARGET \

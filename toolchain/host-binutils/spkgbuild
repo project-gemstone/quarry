@@ -19,7 +19,7 @@ build() {
   cd build
 
   ../configure \
-    --prefix="$TOOLS" \
+    --prefix="$TOOLS_DIR" \
     --target=$XTARGET $ARCHCONFIG \
     --with-bugurl="https://github.com/project-gemstone/openbdk/issues" \
     --with-sysroot="$SYSROOT_DIR" \
@@ -46,9 +46,9 @@ build() {
 
   make MAKEINFO="true" install
 
-  rm -rf "$TOOLS"/bin/$XTARGET-ld
+  rm -rf "$TOOLS_DIR"/bin/$XTARGET-ld
 
-  ln -sf $XTARGET-ld.bfd "$TOOLS"/bin/$XTARGET-ld
+  ln -sf $XTARGET-ld.bfd "$TOOLS_DIR"/bin/$XTARGET-ld
 
   touch $PKG/empty
 }

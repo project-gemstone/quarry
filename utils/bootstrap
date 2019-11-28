@@ -52,12 +52,12 @@ setup_env() {
 	export PACKAGES="$BUILD/packages"
 	export ROOTFS_DIR="$BUILD/rootfs"
 	export SYSROOT_DIR="$BUILD/toolchain/$XTARGET/sysroot"
-	export TOOLS="$BUILD/toolchain"
+	export TOOLS_DIR="$BUILD/toolchain"
 	export ARTIFACTS="$BUILD/artifacts"
 
 	## compiler variables
 	export LC_ALL="POSIX"
-	export PATH="$UTILS:$TOOLS/bin:$TOOLS/bin:$PATH"
+	export PATH="$UTILS:$TOOLS_DIR/bin:$TOOLS_DIR/bin:$PATH"
 	export ORIGMAKE="$(which make)"
 	export CFLAGS="-g0 -Os -s -pipe"
 	export CXXFLAGS="$CFLAGS"
@@ -74,7 +74,7 @@ setup_env() {
 
 	msg "Preparing the environment for build..."
 
-	mkdir -vp "$BUILD" "$PACKAGES" "$ROOTFS_DIR" "$TOOLS" "$ARTIFACTS"
+	mkdir -vp "$BUILD" "$PACKAGES" "$ROOTFS_DIR" "$TOOLS_DIR" "$ARTIFACTS"
 
 	mkdir -p $ARTIFACTS/rootfs
 	
@@ -86,7 +86,7 @@ setup_env() {
 
 	msg "Setting package index..."
 
-	mkdir -vp $TOOLS/var/lib/scratchpkg/index
+	mkdir -vp $TOOLS_DIR/var/lib/scratchpkg/index
 
 	mkdir -vp $ROOTFS_DIR/var/lib/scratchpkg/index
 
@@ -94,9 +94,9 @@ setup_env() {
 
         msg "Adding some staging directories inside toolchain..."
 
-	mkdir -vp $TOOLS/var/cache/scratchpkg/sources
+	mkdir -vp $TOOLS_DIR/var/cache/scratchpkg/sources
 
-	mkdir -vp $TOOLS/var/cache/scratchpkg/log
+	mkdir -vp $TOOLS_DIR/var/cache/scratchpkg/log
 
 	msg "Adding some staging directories inside chroot..."
 
@@ -114,11 +114,11 @@ setup_env() {
 	
 	msg "Adding fake ldconfig"
 	
-	mkdir -p "$TOOLS"/bin
+	mkdir -p "$TOOLS_DIR"/bin
 
-	touch "$TOOLS"/bin/ldconfig
+	touch "$TOOLS_DIR"/bin/ldconfig
 	
-	chmod +x "$TOOLS"/bin/ldconfig
+	chmod +x "$TOOLS_DIR"/bin/ldconfig
 }
 
 gen_config() {
@@ -134,12 +134,12 @@ gen_config() {
 			    export BUILD_ARCH="$BUILD_ARCH"
 			    export XHOST="$XHOST"
 			    export XTARGET="$XTARGET"
-			    export TOOLS="$TOOLS"
+			    export TOOLS_DIR="$TOOLS_DIR"
 			    export PKGDEST="$PACKAGES"
 			    export PACKAGES="$BUILD/packages"
 			    export ROOTFS_DIR="$BUILD/rootfs"
 			    export SYSROOT_DIR="$BUILD/toolchain/$XTARGET/sysroot"
-			    export TOOLS="$BUILD/toolchain"
+			    export TOOLS_DIR="$BUILD/toolchain"
 			    export PATH="$PATH"
 			    export BOOTSTRAP="yes"
 			
@@ -185,13 +185,13 @@ gen_config() {
 			    export BUILD_ARCH="$BUILD_ARCH"
 			    export XHOST="$XHOST"
 			    export XTARGET="$XTARGET"
-			    export TOOLS="$TOOLS"
+			    export TOOLS_DIR="$TOOLS_DIR"
 			    export PKGDEST="$PACKAGES"
 			    export PATH="$PATH"
 			    export PACKAGES="$BUILD/packages"
 			    export ROOTFS_DIR="$BUILD/rootfs"
 			    export SYSROOT_DIR="$BUILD/toolchain/$XTARGET/sysroot"
-			    export TOOLS="$BUILD/toolchain"
+			    export TOOLS_DIR="$BUILD/toolchain"
 			    export BOOTSTRAP="yes"
 			
 			    ## build variables
@@ -208,15 +208,15 @@ gen_config() {
 			    CURL_OPTS="--insecure"
 			    COMPRESSION_MODE="xz"
 			    OPTIONS=(buildflags emptydirs makeflags)               
-                            SOURCE_DIR="$TOOLS/var/cache/scratchpkg/sources"
+                            SOURCE_DIR="$TOOLS_DIR/var/cache/scratchpkg/sources"
                             PACKAGE_DIR="$PACKAGES"
-                            LOG_DIR="$TOOLS/var/cache/scratchpkg/log"
+                            LOG_DIR="$TOOLS_DIR/var/cache/scratchpkg/log"
 		EOF
 	fi
 }
 
 # pkgbuild-toolchain <package name>
-# Note: Installs into $TOOLS directory.
+# Note: Installs into $TOOLS_DIR directory.
 pkgbuild-toolchain() {
 
 	if [ -f "$PACKAGES/.$1.stamp" ]; then
@@ -294,7 +294,7 @@ build_toolchain() {
 
 	msg "Adding fake ldconfig"
 
-	mkdir -vp "$TOOLS"/bin && touch "$TOOLS"/bin/ldconfig && chmod +x "$TOOLS"/bin/ldconfig
+	mkdir -vp "$TOOLS_DIR"/bin && touch "$TOOLS_DIR"/bin/ldconfig && chmod +x "$TOOLS_DIR"/bin/ldconfig
 	
 	msg "Building the toolchain now..."
 
@@ -303,16 +303,16 @@ build_toolchain() {
 			*)
 				pkgbuild-toolchain $pkg
 				msg "Here is the toolchain..."
-				ls $TOOLS
+				ls $TOOLS_DIR
 				;;
 		esac
 	done
 
 	msg "Cleaning up"
 
-	find "$TOOLS" -name "*.pod" -print0 | xargs --verbose -0 rm -rf
+	find "$TOOLS_DIR" -name "*.pod" -print0 | xargs --verbose -0 rm -rf
 
-	find "$TOOLS" -name ".packlist" -print0 | xargs --verbose -0 rm -rf
+	find "$TOOLS_DIR" -name ".packlist" -print0 | xargs --verbose -0 rm -rf
 
 	msg "Done building toolchain for $BUILD_ARCH"
 
