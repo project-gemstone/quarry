@@ -105,6 +105,8 @@ build() {
   make -j1 install
 
   ln -sf $XTARGET-gcc "$TOOLS"/bin/$XTARGET-cc
+  
+  ln -sv $XTARGET-gcc "$TOOLS_DIR"/bin/cc
 
   touch $PKG/empty
 }
