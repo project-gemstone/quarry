@@ -38,11 +38,16 @@ setup_env() {
 
 	msg "Setting shell enviroment..."
 
-	## build variables
+	## bootstrap variables
+	export CWD="$(pwd)"
+	export REPO_PACKAGES="$CWD/packages"
+	export TOOLCHAIN_PKGS="$CWD/toolchain"
+	export UTILS="$CWD/utils"
 	export BUILD_ARCH=$BUILD_ARCH
+
+	## build variables
 	export HOST_ARCH=$(echo $MACHTYPE | sed 's/-.*//')
 	export QEMU_BIN=$(which $QEMUARCH)
-	export CWD="$(pwd)"
 	export BUILD="$CWD/BUILD.$BUILD_ARCH"
 	export PACKAGES="$BUILD/packages"
 	export ROOTFS_DIR="$BUILD/rootfs"
@@ -50,15 +55,9 @@ setup_env() {
 	export TOOLS="$BUILD/toolchain"
 	export ARTIFACTS="$BUILD/artifacts"
 
-	## BDK variables
-	export BDK="$(pwd)"
-	export BDK_PACKAGES="$BDK/packages"
-	export BDK_TOOLS="$BDK/toolchain"
-	export BDK_UTILS="$BDK/utils"
-
 	## compiler variables
 	export LC_ALL="POSIX"
-	export PATH="$BDK_UTILS:$TOOLS/bin:$TOOLS/bin:$PATH"
+	export PATH="$UTILS:$TOOLS/bin:$TOOLS/bin:$PATH"
 	export ORIGMAKE="$(which make)"
 	export CFLAGS="-g0 -Os -s -pipe"
 	export CXXFLAGS="$CFLAGS"
@@ -170,7 +169,6 @@ gen_config() {
 			    export STRIP="$XTARGET-strip"     
 			
 			    ## scratchpkg variables
-			    PACKAGE_DIR=$PACKAGES
 			    DOWNLOAD_PROG="wget"
 			    WGET_OPTS="--no-check-certificate --tries=15"
 			    CURL_OPTS="--insecure"
@@ -205,7 +203,6 @@ gen_config() {
 			    export ORIGMAKE="$ORIGMAKE"
 			
 			    ## pkgbuild variables
-			    PACKAGE_DIR=$PACKAGES
 			    DOWNLOAD_PROG="wget"
 			    WGET_OPTS="--no-check-certificate --tries=15"
 			    CURL_OPTS="--insecure"
@@ -229,7 +226,7 @@ pkgbuild-toolchain() {
 
 	msg "Building $1 for toolchain using host config..."
 
-	cd $BDK_TOOLS/$1 && pkgbuild --verbose --config=$BUILD/host.conf
+	cd $TOOLCHAIN_PKGS/$1 && pkgbuild --verbose --config=$BUILD/host.conf
 
 	echo "$1" >$PACKAGES/.$1.stamp
 }
@@ -246,7 +243,7 @@ pkgbuild-target() {
 
 	msg "Building $1 using target config..."
 
-	cd $BDK_PACKAGES/$1 && pkgbuild --verbose --skip-shasum --config=$BUILD/target.conf
+	cd $REPO_PACKAGES/$1 && pkgbuild --verbose --skip-shasum --config=$BUILD/target.conf
 
 	msg "Installing $1 into $2"
 
@@ -269,7 +266,7 @@ pkgbuild-host() {
 
 	msg "Building $1 using host config..."
 
-	cd $BDK_PACKAGES/$1 && pkgbuild --verbose --skip-shasum --config=$BUILD/host.conf
+	cd $REPO_PACKAGES/$1 && pkgbuild --verbose --skip-shasum --config=$BUILD/host.conf
 
 	msg "Installing $1 into $2"
 
