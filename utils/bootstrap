@@ -153,6 +153,8 @@ gen_config() {
 			    export ORIGMAKE="$ORIGMAKE"
 			    export BUILDFLAGS="--build=$XHOST --host=$XTARGET"
 			    export TOOLFLAGS="--build=$XHOST --host=$XTARGET --target=$XTARGET"
+			    export PKG_CONFIG_PATH="$SYSROOT_DIR/usr/lib/pkgconfig:$SYSROOT_DIR/usr/share/pkgconfig"
+		            export PKG_CONFIG_SYSROOT_DIR="$SYSROOT_DIR"
 			
 			    ## target binaries
 			    export CROSS_COMPILE="$XTARGET-"
@@ -298,7 +300,7 @@ build_toolchain() {
 	
 	msg "Building the toolchain now..."
 
-	for pkg in host-info host-file host-m4 host-linux-api-headers host-binutils host-gcc-static host-glibc host-gcc; do
+	for pkg in host-info host-file host-m4 host-pkgconf host-linux-api-headers host-binutils host-gcc-static host-glibc host-gcc; do
 		case $pkg in
 			*)
 				pkgbuild-toolchain $pkg
