@@ -47,8 +47,6 @@ build() {
 
   cd "$SRC"/gcc-$version
   
-  cat gcc/limitx.h gcc/glimits.h gcc/limity.h > `dirname $(${TOOLS}/bin/${XTARGET}-gcc -print-libgcc-file-name)`/include-fixed/limits.h
-
   sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
   
   patch -Np1 -i ../gcc-pure64.patch
