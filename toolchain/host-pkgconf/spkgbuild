@@ -1,0 +1,29 @@
+# description	: package compiler and linker metadata toolkit.
+
+name=host-pkgconf
+version=1.6.3
+release=1
+source=("http://distfiles.dereferenced.org/pkgconf/pkgconf-$version.tar.xz")
+sha256sum=('61f0b31b0d5ea0e862b454a80c170f57bad47879c0c42bd8de89200ff62ea210')
+
+build() {
+	cd "$SRC"/pkgconf-$version
+	
+  LDFLAGS="-static" \
+	./configure \
+		--prefix="$TOOLS" \
+		--with-sysroot="$SYSROOT_DIR" \
+		--with-pkg-config-dir="$SYSROOT_DIR/usr/lib/pkgconfig:$SYSROOT_DIR/usr/share/pkgconfig" \
+		--with-system-libdir="$SYSROOT_DIR/usr/lib" \
+		--with-system-includedir="$SYSROOT_DIR/usr/include"
+	
+  make
+	
+  make install
+
+	ln -sf pkgconf "$TOOLS"/bin/pkg-config
+	
+  ln -sf pkgconf "$TOOLS"/bin/$XTARGET-pkg-config
+	
+  ln -sf pkgconf "$TOOLS"/bin/$XTARGET-pkgconf
+}
