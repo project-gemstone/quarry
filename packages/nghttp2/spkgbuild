@@ -16,6 +16,7 @@ build() {
 		--without-jemalloc \
 		--without-libxml2 \
 		--without-neverbleed \
+		--without-systemd \
 		--enable-app \
 		--disable-examples \
 		--disable-python-bindings \
