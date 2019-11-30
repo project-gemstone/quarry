@@ -9,7 +9,7 @@ sha256sums=(a2d216450abd2beaf4e200c168957968e89d602ca4119338b9d7ab059fd4ce8b)
 build() {
 	cd "$SRC"/$name-$version
 
-	autoreconf -i
+	autoreconf -vif
 
 	./configure $BUILDFLAGS \
 		--prefix=/usr \
