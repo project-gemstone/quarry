@@ -26,4 +26,6 @@ build() {
   ln -sf pkgconf "$TOOLS"/bin/$XTARGET-pkg-config
 	
   ln -sf pkgconf "$TOOLS"/bin/$XTARGET-pkgconf
+  
+  touch $PKG/empty
 }
