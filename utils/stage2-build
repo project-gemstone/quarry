@@ -38,7 +38,7 @@ umount_chroot() {
 }
 
 run_chroot_cmd() {
-  if [ -f $ROOTFS_DIR/bin/bash ];
+  if [ -f $ROOTFS_DIR/bin/bash ]; then
      export ROOTFS_SHELL=/bin/bash
   else
      export ROOTFS_SHELL=/bin/ash
