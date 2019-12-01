@@ -387,11 +387,13 @@ if [ "$PACKAGE_ALL" = "yes" ]; then
 	cd $PACKAGES && tar -zcvf $ARTIFACTS/packages-$BUILD_ARCH-$FILE_DATE.tar.gz --exclude 'host-*' --exclude '*.stamp' *
 
 	msg "Setting up temp rootfs..."
+	
+	mkdir -p $ARTIFACTS/rootfs
 
 	for pkg in filesystem zlib diffutils tar libgmp libmpfr libmpc binutils gcc gawk file ncurses bzip2 libelf attr acl expat libressl ca-certificates xz lz4 zstd m4 bison bc binutils make sed grep bash coreutils gzip findutils patch scratchpkg pkgconf perl autoconf automake libtool c-ares libev nghttp2 libssh2 curl libarchive readline cpio; do
 		case $pkg in
 			*)
-				pkgbuild-target $pkg $ROOTFS_DIR
+				pkginstall $pkg $ARTIFACTS/rootfs
 				;;
 		esac
 	done
