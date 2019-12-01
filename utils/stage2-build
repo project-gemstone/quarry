@@ -18,7 +18,6 @@ fail() {
 }
 
 mount_chroot() {
-        mkdir -p $ROOTFS_DIR/dev
 	msg "Mounting chroot..."
 	mount -v --bind /dev $ROOTFS_DIR/dev
 	mount -vt devpts devpts $ROOTFS_DIR/dev/pts -o gid=5,mode=620
