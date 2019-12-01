@@ -123,11 +123,7 @@ build() {
 		ln -sf g++-gcc-$version $XTARGET-g++
 	)
 	
-	[ -f gcc/limitx.h ] && echo "File exists" || echo "File does not exist"
-	
-	[ -f ..gcc/limitx.h ] && echo "File exists" || echo "File does not exist"
-	
-	exit 1
+        cd "$SRC"/gcc-$version
 	
         cat gcc/limitx.h gcc/glimits.h gcc/limity.h > $PKG/usr/lib/gcc/$XTARGET/$version/include-fixed/limits.h
 	
