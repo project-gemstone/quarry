@@ -120,6 +120,8 @@ curl https://raw.githubusercontent.com/junland/openbdk-ng/testing/files/test.c >
 
 run_chroot_cmd "cd / && gcc test.c -o test"
 
+exit 0
+
 msg "Adding packages..."
 
 mkdir -p $ROOTFS_DIR/pkgs
