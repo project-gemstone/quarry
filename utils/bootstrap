@@ -40,7 +40,7 @@ setup_env() {
 
 	## bootstrap variables
 	export CWD="$(pwd)"
-	export REPO_PACKAGES="$CWD/packages"
+	export REPO_PACKAGES="$CWD/core"
 	export TOOLCHAIN_PKGS="$CWD/toolchain"
 	export UTILS="$CWD/utils"
 	export BUILD_ARCH=$BUILD_ARCH
