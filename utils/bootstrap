@@ -228,7 +228,7 @@ pkgbuild-toolchain() {
 
 	msg "Building $1 for toolchain using host config..."
 
-	cd $TOOLCHAIN_PKGS/$1 && pkgbuild --verbose --config=$BUILD/host.conf
+	cd $TOOLCHAIN_PKGS/$1 && pkgbuild -l --verbose --config=$BUILD/host.conf
 
 	echo "$1" >$PACKAGES/.$1.stamp
 }
