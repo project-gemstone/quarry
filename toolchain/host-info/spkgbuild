@@ -13,11 +13,6 @@ build() {
   env >$TOOLS_DIR/toolchain.env
   
   echo "TOOLCHAIN_VERSION=$version" >$TOOLS_DIR/toolchain.version
-  
-  msg "EEEEE"
-  msg "WERWERWE"
-  
-  exit 1
 
   touch $PKG/empty
 }
