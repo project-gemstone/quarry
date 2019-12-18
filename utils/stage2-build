@@ -101,9 +101,11 @@ export HOST_ARCH=$(uname -m)
 case $ROOTFS_DIR_ARCH in
 		x86_64)
 			msg "Setting architecture for x86_64..."
+			echo "BUILD_ARCH=x86_64" >> $ROOTFS_DIR/scratchpkg.conf
 			;;
 		aarch64)
 			msg "Setting architecture for aarch64..."
+                        echo "BUILD_ARCH=aarch64" >> $ROOTFS_DIR/scratchpkg.conf
 			;;
 		*)
 			fail "Architecture is not supported by 'stage2-build' script -- ( $ROOTFS_DIR_ARCH )"
