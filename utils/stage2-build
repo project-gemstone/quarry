@@ -102,6 +102,9 @@ case $ROOTFS_DIR_ARCH in
 		x86_64)
 			msg "Setting architecture for x86_64..."
 			echo "BUILD_ARCH=x86_64" >> $ROOTFS_DIR/etc/scratchpkg.conf
+			echo "XTARGET=x86_64-linux-gnu" >> $ROOTFS_DIR/etc/scratchpkg.conf
+			echo "XHOST=x86_64-linux-gnu" >> $ROOTFS_DIR/etc/scratchpkg.conf
+			echo "HOSTCC=gcc" >> $ROOTFS_DIR/etc/scratchpkg.conf
 			;;
 		aarch64)
 			msg "Setting architecture for aarch64..."
