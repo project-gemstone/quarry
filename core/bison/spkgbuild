@@ -17,5 +17,5 @@ build() {
 
 	make
 
-	make DESTDIR="$PKG" install
+	make DESTDIR="$PKG" install -j1
 }
