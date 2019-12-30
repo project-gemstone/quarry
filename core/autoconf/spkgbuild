@@ -11,11 +11,12 @@ build() {
 	cd "$SRC"/$name-$version
 
 	patch -p1 -i ../autoconf-2.69-libtool-compatibility.patch
+	
+	curl https://raw.githubusercontent.com/ataraxialinux/ataraxia/master/stuff/config.guess > build-aux/config.guess
+	
+	curl https://raw.githubusercontent.com/ataraxialinux/ataraxia/master/stuff/config.sub > build-aux/config.sub
 
-	M4=m4 \
-		./configure $BUILDFLAGS \
-		--prefix=/usr \
-		--disable-nls
+	M4=m4 ./configure $BUILDFLAGS --prefix=/usr --disable-nls
 
 	make
 
