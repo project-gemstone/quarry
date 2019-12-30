@@ -10,11 +10,22 @@ sha256sums=('66415634c6e8c3fa8b71362879ec7575e27da43da562c798a8a2f223e6e47f5c')
 build() {
 	cd "$SRC"/$name-$version
 
-	./configure $BUILDFLAGS --prefix=/usr --disable-static 
+	./configure $BUILDFLAGS --prefix=/usr --disable-static
+	
+	# get rid of host lib search dirs from Makefiles
+	for mk in $(find -name Makefile) ; do
+	  sed -i 's|-L/usr/lib||' $mk
+	done
+
+	# use same type fix as done for gcc port, to prevent libtool
+	# from linking in host libraries
+	for lt_file in $(find -name 'libtool') ; do
+	  sed -i 's/func_append add_dir \" /add_dir=\"/' $lt_file
+	done
 
 	make
 
 	make DESTDIR="$PKG" install -j1
   
-  chmod -v 0755 $PKG/usr/lib/preloadable_libintl.so
+        chmod -v 0755 $PKG/usr/lib/preloadable_libintl.so
 }
