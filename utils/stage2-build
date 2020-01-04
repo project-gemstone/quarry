@@ -93,9 +93,11 @@ if [ ! -n "$3" ]; then
   fail "Need to specify the architecture for the root filesystem..."
 fi
 
+export CWD="$(pwd)"
 export REPO=$1
 export ROOTFS_DIR=$2
 export ROOTFS_DIR_ARCH=$3
+export ARTIFACTS=$CWD/artifacts
 export HOST_ARCH=$(uname -m)
 
 case $ROOTFS_DIR_ARCH in
@@ -133,12 +135,46 @@ cp -r $REPO/* $ROOTFS_DIR/pkgs
 
 msg "Building stage 2 packages..."
 
-for pkg in filesystem linux-api-headers zlib diffutils tar libgmp libmpfr libmpc binutils gcc gawk file ncurses bzip2 libelf attr acl expat libressl ca-certificates xz lz4 zstd m4 bison bc binutils make sed grep bash coreutils gzip findutils patch scratchpkg pkgconf perl autoconf automake libtool c-ares libev nghttp2 libssh2 curl libarchive readline gettext cpio; do
+for pkg in filesystem linux-api-headers zlib diffutils tar libgmp libmpfr libmpc binutils gcc gawk file ncurses bzip2 libelf attr acl expat libressl ca-certificates xz lz4 zstd m4 bison bc binutils make sed grep bash coreutils gzip findutils patch scratchpkg pkgconf perl autoconf automake libtool c-ares libev nghttp2 libssh2 curl libarchive readline gettext cpio libcap-ng gperf kmod eudev; do
 	case $pkg in
 		*)
                         run_chroot_cmd "cd /pkgs/$pkg && pkgbuild --verbose --skip-shasum"
 			;;
 	esac
 done
+
+if [ "$PACKAGE_ALL" = "yes" ]; then
+        msg "Packing up packages and root filesystem."
+
+	FILE_DATE=$(date +%Y%m%d_%H%M%S)
+	
+	msg "Setting up artifact directory..."
+	
+	mkdir -p $ARTIFACTS
+
+	msg "Packing packages..."
+
+	cd $PACKAGES && tar -zcvf $ARTIFACTS/packages-$BUILD_ARCH-$FILE_DATE.tar.gz --exclude 'host-*' --exclude '*.stamp' *
+
+	msg "Setting up temp rootfs..."
+	
+	mkdir -p $ARTIFACTS/rootfs
+
+	for pkg in filesystem linux-api-headers glibc zlib diffutils tar libgmp libmpfr libmpc binutils gcc gawk file ncurses bzip2 libelf attr acl expat libressl ca-certificates xz lz4 zstd m4 bison bc binutils make sed grep bash coreutils gzip findutils patch scratchpkg pkgconf perl autoconf automake libtool c-ares libev nghttp2 libssh2 curl libarchive readline gettext cpio libcap-ng gperf kmod eudev; do
+		case $pkg in
+			*)
+				pkginstall $pkg $ARTIFACTS/rootfs
+				;;
+		esac
+	done
+
+	msg "Packing rootfs..."
+
+	cd $ARTIFACTS/rootfs && tar -zcvf $ARTIFACTS/rootfs-$BUILD_ARCH-$FILE_DATE.tar.gz *
+
+	msg "Removing temp rootfs"
+
+	rm -rf $ARTIFACTS/rootfs
+fi
 
 msg "Done..."
