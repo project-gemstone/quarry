@@ -37,6 +37,16 @@ umount_chroot() {
 	msg "Done unmounting chroot."
 }
 
+pkginstall() {
+        unset PKG_NAME
+
+	msg "Just installing $1 into $2"
+
+	PKG_NAME=$(ls $PACKAGES | grep "^$1-[[:digit:]]")
+
+	cd $ROOTFS/var/cache/scratchpkg/packages && pkgadd $PKG_NAME --verbose --no-ld-config --root=$2
+}
+
 run_chroot_cmd() {
   if [ -f $ROOTFS_DIR/bin/bash ]; then
      export ROOTFS_SHELL=/bin/bash
@@ -156,7 +166,7 @@ if [ "$PACKAGE_ALL" = "yes" ]; then
 
 	msg "Packing packages..."
 
-	cd $PACKAGES && tar -zcvf $ARTIFACTS/packages-$BUILD_ARCH-$FILE_DATE.tar.gz --exclude 'host-*' --exclude '*.stamp' *
+	cd $ROOTFS/var/cache/scratchpkg/packages && tar -zcvf $ARTIFACTS/packages-$BUILD_ARCH-$FILE_DATE.tar.gz *
 
 	msg "Setting up temp rootfs..."
 	
