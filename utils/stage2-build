@@ -143,6 +143,8 @@ for pkg in filesystem linux-api-headers zlib diffutils tar libgmp libmpfr libmpc
 	esac
 done
 
+umount_chroot
+
 if [ "$PACKAGE_ALL" = "yes" ]; then
         msg "Packing up packages and root filesystem."
 
