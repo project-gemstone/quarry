@@ -107,7 +107,7 @@ export CWD="$(pwd)"
 export REPO=$1
 export ROOTFS_DIR=$2
 export ROOTFS_DIR_ARCH=$3
-export ARTIFACTS=$CWD/artifacts
+export ARTIFACTS_DIR=$CWD/artifacts
 export HOST_ARCH=$(uname -m)
 
 case $ROOTFS_DIR_ARCH in
@@ -162,31 +162,31 @@ if [ "$PACKAGE_ALL" = "yes" ]; then
 	
 	msg "Setting up artifact directory..."
 	
-	mkdir -p $ARTIFACTS
+	mkdir -p $ARTIFACTS_DIR
 
 	msg "Packing packages..."
 
-	cd $ROOTFS/var/cache/scratchpkg/packages && tar -zcvf $ARTIFACTS/packages-$BUILD_ARCH-$FILE_DATE.tar.gz *
+	cd $ROOTFS_DIR/var/cache/scratchpkg/packages && tar -zcvf $ARTIFACTS/packages-$BUILD_ARCH-$FILE_DATE.tar.gz *
 
 	msg "Setting up temp rootfs..."
 	
-	mkdir -p $ARTIFACTS/rootfs
+	mkdir -p $ARTIFACTS_DIR/rootfs
 
 	for pkg in filesystem linux-api-headers glibc zlib diffutils tar libgmp libmpfr libmpc binutils gcc gawk file ncurses bzip2 libelf attr acl expat libressl ca-certificates xz lz4 zstd m4 bison bc binutils make sed grep bash coreutils gzip findutils patch scratchpkg pkgconf perl autoconf automake libtool c-ares libev nghttp2 libssh2 curl libarchive readline gettext cpio libcap-ng; do
 		case $pkg in
 			*)
-				pkginstall $pkg $ARTIFACTS/rootfs
+				pkginstall $pkg $ARTIFACTS_DIR/rootfs
 				;;
 		esac
 	done
 
 	msg "Packing rootfs..."
 
-	cd $ARTIFACTS/rootfs && tar -zcvf $ARTIFACTS/rootfs-$BUILD_ARCH-$FILE_DATE.tar.gz *
+	cd $ARTIFACTS_DIR/rootfs && tar -zcvf $ARTIFACTS_DIR/rootfs-$BUILD_ARCH-$FILE_DATE.tar.gz *
 
 	msg "Removing temp rootfs"
 
-	rm -rf $ARTIFACTS/rootfs
+	rm -rf $ARTIFACTS_DIR/rootfs
 fi
 
 msg "Done..."
