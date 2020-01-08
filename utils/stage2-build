@@ -44,7 +44,7 @@ pkginstall() {
 
 	PKG_NAME=$(ls $PACKAGES | grep "^$1-[[:digit:]]")
 
-	cd $ROOTFS/var/cache/scratchpkg/packages && pkgadd $PKG_NAME --verbose --no-ld-config --root=$2
+	cd $ROOTFS_DIR/var/cache/scratchpkg/packages && pkgadd $PKG_NAME --verbose --no-ld-config --root=$2
 }
 
 run_chroot_cmd() {
