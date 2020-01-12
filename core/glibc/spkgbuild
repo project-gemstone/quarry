@@ -41,7 +41,6 @@ build() {
 	      --disable-profile \
 	      --disable-werror \
 	      --enable-shared \
-	      --without-python --without-python3 \
 	      --cache-file=config.cache
 
 	make -j1
