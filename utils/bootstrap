@@ -245,7 +245,7 @@ pkgbuild-target() {
 
 	msg "Building $1 using target config..."
 
-	cd $REPO_PACKAGES/$1 && pkgbuild --verbose --skip-shasum --quiet --config=$BUILD/target.conf
+	cd $REPO_PACKAGES/$1 && pkgbuild --verbose --skip-shasum --config=$BUILD/target.conf
 
 	msg "Installing $1 into $2"
 
@@ -268,7 +268,7 @@ pkgbuild-host() {
 
 	msg "Building $1 using host config..."
 
-	cd $REPO_PACKAGES/$1 && pkgbuild --verbose --skip-shasum --quiet --config=$BUILD/host.conf
+	cd $REPO_PACKAGES/$1 && pkgbuild --verbose --skip-shasum --config=$BUILD/host.conf
 
 	msg "Installing $1 into $2"
 
