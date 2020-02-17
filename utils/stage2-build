@@ -151,7 +151,6 @@ for pkg in filesystem linux-api-headers glibc zlib diffutils tar libgmp libmpfr 
 	case $pkg in
 	        python)
 		        run_chroot_cmd "cd /pkgs/$pkg && pkgbuild --verbose --skip-shasum"
-			run_chroot_cmd "cd /var/cache/scratchpkg/packages && 
 		        ;;
 		*)
                         run_chroot_cmd "cd /pkgs/$pkg && pkgbuild --verbose --skip-shasum"
