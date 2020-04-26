@@ -16,6 +16,11 @@ build() {
 	echo "libc_cv_c_cleanup=yes" >> config.cache
 	echo "libc_cv_ssp=no" >> config.cache
 	echo "libc_cv_ssp_strong=no" >> config.cache
+	
+	echo "slibdir=/usr/lib" >> configparms
+	echo "rtlddir=/usr/lib" >> configparms
+	echo "sbindir=/usr/bin" >> configparms
+	echo "rootsbindir=/usr/bin" >> configparms
 
 	BUILD_CC="$HOSTCC" \
 	CC="$XTARGET-gcc" \
