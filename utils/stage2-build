@@ -66,15 +66,16 @@ run_chroot_cmd() {
 }
 
 qemu_system_inject() {
+  msg "Detecting root filesystem..."
   if [ "$HOST_ARCH" != "$ROOTFS_DIR_ARCH" ]; then
       case $ROOTFS_DIR_ARCH in
         x86_64 | x86-64)
           msg "Copying /usr/bin/qemu-system-x86_64 to $ROOTFS_DIR"
-          cp /usr/bin/qemu-system-x86_64 $ROOTFS_DIR/usr/bin
+          cp -v /usr/bin/qemu-system-x86_64 $ROOTFS_DIR/usr/bin
           ;;
         aarch64 | arm64)
           msg "Copying /usr/bin/qemu-system-aarch64 to $ROOTFS_DIR"
-          cp /usr/bin/qemu-system-aarch64 $ROOTFS_DIR/usr/bin
+          cp -v /usr/bin/qemu-system-aarch64 $ROOTFS_DIR/usr/bin
           ;;
         *)
           fail "Architecture is not supported by 'stage2-build' script -- ( $ROOTFS_DIR_ARCH )"
