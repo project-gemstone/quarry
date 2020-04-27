@@ -70,14 +70,11 @@ build() {
 	for d in bin games include lib/{modules,firmware} share/misc src; do
 		install -d -m755 usr/$d
 	done
-
-	ln -sf usr/bin bin
-	ln -sf usr/bin sbin
-	ln -sf bin usr/sbin
-	ln -sf usr/lib lib
 	
-	## Need to fix this, we only want to use /lib 
-	ln -sf usr/lib lib64
+	ln -sf usr/bin bin
+        ln -sf usr/sbin sbin
+        ln -sf usr/lib lib
+        ln -sf usr/lib lib64
 
 	for d in bin etc games include lib man sbin share src; do
 		install -d -m755 usr/local/$d
