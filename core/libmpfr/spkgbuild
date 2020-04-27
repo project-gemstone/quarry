@@ -3,7 +3,7 @@
 name=libmpfr
 version=4.0.2
 release=1
-source=("http://www.mpfr.org/mpfr-$version/mpfr-$version.tar.xz")
+source=("https://ftp.gnu.org/gnu/mpfr/mpfr-$version.tar.xz")
 sha256sums=(1d3be708604eae0e42d578ba93b390c2a145f17743a744d8f3f8c2ad5855a38a)
 
 build() {
