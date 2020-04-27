@@ -1,6 +1,6 @@
 #!/bin/bash
 
-trap umount_chroot HUP INT QUIT TERM SIGHUP SIGINT SIGQUIT SIGILL SIGABRT SIGKILL SIGTRAP SIGTERM SIGSTOP SIGSEGV
+trap umount_chroot HUP INT QUIT TERM SIGHUP SIGINT SIGQUIT SIGILL SIGABRT SIGTRAP SIGTERM SIGSEGV
 
 msg() {
 	printf '[\033[32m INFO\033[m ] %s\n' "$@"
@@ -13,25 +13,25 @@ fail() {
 
 mount_chroot() {
 	msg "Mounting chroot..."
-	mount -v --bind /dev $ROOTFS_DIR/dev
-	mount -vt devpts devpts $ROOTFS_DIR/dev/pts -o gid=5,mode=620
-	mount -vt proc proc $ROOTFS_DIR/proc
-	mount -vt sysfs sysfs $ROOTFS_DIR/sys
-	mount -vt tmpfs tmpfs $ROOTFS_DIR/run
+	mount -v --bind /dev "$ROOTFS_DIR"/dev
+	mount -vt devpts devpts "$ROOTFS_DIR"/dev/pts -o gid=5,mode=620
+	mount -vt proc proc "$ROOTFS_DIR"/proc
+	mount -vt sysfs sysfs "$ROOTFS_DIR"/sys
+	mount -vt tmpfs tmpfs "$ROOTFS_DIR"/run
 	msg "Done mounting chroot."
 }
 
 umount_chroot() {
 	msg "Unmounting chroot..."
-	umount -v $ROOTFS_DIR/dev/pts
-	umount -v $ROOTFS_DIR/dev
-	umount -v $ROOTFS_DIR/run
-	umount -v $ROOTFS_DIR/proc
-	umount -v $ROOTFS_DIR/sys
+	umount -v "$ROOTFS_DIR"/dev/pts
+	umount -v "$ROOTFS_DIR"/dev
+	umount -v "$ROOTFS_DIR"/run
+	umount -v "$ROOTFS_DIR"/proc
+	umount -v "$ROOTFS_DIR"/sys
 	msg "Done unmounting chroot."
 }
 
-if [ $1 == "" ]; then
+if [ "$1" == "" ]; then
 	fail "No rootfs directory has been specified"
 fi
 
