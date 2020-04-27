@@ -130,6 +130,10 @@ case $ROOTFS_DIR_ARCH in
 			;;
 esac
 
+msg "mounting qemu-binfmt..."
+
+mount binfmt_misc -t binfmt_misc /proc/sys/fs/binfmt_misc/
+
 qemu_system_inject
 
 mount_chroot
