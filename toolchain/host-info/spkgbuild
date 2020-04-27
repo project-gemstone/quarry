@@ -14,11 +14,6 @@ build() {
   
   echo "TOOLCHAIN_VERSION=$version" >$TOOLS_DIR/toolchain.version
   
-  ln -sf usr/bin $TOOLS_DIR/bin
-  ln -sf usr/sbin $TOOLS_DIR/sbin
-  ln -sf usr/lib $TOOLS_DIR/lib
-  ln -sf usr/lib $TOOLS_DIR/lib64
-  
   install -d -m1777 $TOOLD_DIR/tmp
   
   install -d -m1777 $TOOLS_DIR/var/{tmp,spool/mail}
