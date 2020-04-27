@@ -29,6 +29,26 @@ pkginstall() {
 	cd "$ROOTFS_DIR"/var/cache/scratchpkg/packages && pkgadd "$PKG_NAME" --verbose --no-ld-config --root="$2"
 }
 
+mount_chroot() {
+	msg "Mounting chroot..."
+	mount -v --bind /dev "$ROOTFS_DIR"/dev
+	mount -vt devpts devpts "$ROOTFS_DIR"/dev/pts -o gid=5,mode=620
+	mount -vt proc proc "$ROOTFS_DIR"/proc
+	mount -vt sysfs sysfs "$ROOTFS_DIR"/sys
+	mount -vt tmpfs tmpfs "$ROOTFS_DIR"/run
+	msg "Done mounting chroot."
+}
+
+umount_chroot() {
+	msg "Unmounting chroot..."
+	umount -v "$ROOTFS_DIR"/dev/pts || true
+	umount -v "$ROOTFS_DIR"/dev || true
+	umount -v "$ROOTFS_DIR"/run || true
+	umount -v "$ROOTFS_DIR"/proc || true
+	umount -v "$ROOTFS_DIR"/sys || true
+	msg "Done unmounting chroot."
+}
+
 run_chroot_cmd() {
   if [ -f "$ROOTFS_DIR"/bin/bash ]; then
      export ROOTFS_SHELL=/bin/bash
@@ -86,6 +106,8 @@ case $ROOTFS_DIR_ARCH in
 			;;
 esac
 
+mount_chroot
+
 msg "Testing rootfs first..."
 
 curl https://raw.githubusercontent.com/junland/openbdk-ng/testing/files/test.c > "$ROOTFS_DIR"/test.c
@@ -110,6 +132,8 @@ for pkg in filesystem linux-api-headers glibc zlib diffutils tar libgmp libmpfr 
 			;;
 	esac
 done
+
+umount_chroot
 
 if [ "$PACKAGE_ALL" = "yes" ]; then
         msg "Packing up packages and root filesystem."
