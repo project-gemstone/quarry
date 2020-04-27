@@ -3,6 +3,7 @@
 name=filesystem
 version=0.1
 release=1
+options=(!strip)
 source=(ld.so.conf blacklist.conf crypttab espdiff fstab genfstab group gshadow host.conf hosts issue issue.net motd os-release passwd profile protocols resolv.conf securetty services shadow shells sysctl)
 sha256sums=('b2aa32976a126ca3ed81229502d7a1fe1e23cf8602a0b2422c54945e58f2c172'
             '8745e54bbe74a23dd6cc4f79192eb34ed6a0f263cec0a8169183a3a65dc5cd14'
