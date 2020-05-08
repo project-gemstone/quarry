@@ -3,7 +3,7 @@
 name=filesystem
 version=0.1
 release=1
-options=(!strip)
+options="!strip"
 
 source1=ld.so.conf
 source2=blacklist.conf
