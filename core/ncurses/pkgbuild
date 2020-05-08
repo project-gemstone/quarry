@@ -10,9 +10,9 @@ build() {
 		BUILDFLAGS="$BUILDFLAGS --with-build-cc=$HOSTCC"
 	fi
 
-	cd "$SRC"/$name-$version
+	cd "$SRC"/$name-$version || exit
 
-	./configure $BUILDFLAGS \
+	./configure "$BUILDFLAGS" \
 		--prefix=/usr \
 		--mandir=/usr/share/man \
 		--with-default-terminfo-dir=/usr/share/terminfo \
@@ -42,15 +42,14 @@ build() {
 			vte vte-256color gnome gnome-256color kitty konsole konsole-256color \
 			konsole-linux putty putty-256color rxvt-256color st-* \
 			screen-256color; do
-		local termfile=$(find " $PKG"/usr/share/terminfo/ -name "$i" 2>/dev/null) || true
-		local basedir=$(basename "$(dirname "$termfile""
+		termfile=$(find " $PKG"/usr/share/terminfo/ -name "$i" 2>/dev/null) || true
+		basedir=$(basename "$(dirname "$termfile")")
 
 		[ -z "$termfile" ] && continue
 
-		install -d " $PKG"/etc/terminfo/$basedir
-		mv $termfile " $PKG"/etc/terminfo/$basedir/
-		ln -s ../../../../etc/terminfo/$basedir/$i \
-			" $PKG"/usr/share/terminfo/$basedir/$i
+		install -d " $PKG"/etc/terminfo/"$basedir"
+		mv "$termfile" " $PKG"/etc/terminfo/"$basedir"/
+		ln -s ../../../../etc/terminfo/"$basedir"/"$i" "$PKG"/usr/share/terminfo/"$basedir"/"$i"
 	done
 
 	for lib in ncurses form panel menu; do
