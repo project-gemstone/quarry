@@ -4,8 +4,7 @@ name=python
 version=3.8.1
 pybasever=${version%.*}
 release=1
-source=("https://www.python.org/ftp/python/$version/Python-$version.tar.xz")
-sha256sums=('75894117f6db7051c1b34f37410168844bbb357c139a8a10a352e9bf8be594e8')
+source="https://www.python.org/ftp/python/$version/Python-$version.tar.xz"
 
 build() {
 	cd "$SRC"/Python-${version}

@@ -3,8 +3,7 @@
 name=automake
 version=1.16.1
 release=1
-source=("http://ftp.gnu.org/gnu/$name/$name-$version.tar.xz")
-sha256sums=(5d05bb38a23fd3312b10aea93840feec685bdf4a41146e78882848165d3ae921)
+source="http://ftp.gnu.org/gnu/$name/$name-$version.tar.xz"
 
 build() {
 	cd "$SRC"/$name-$version

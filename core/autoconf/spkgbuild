@@ -4,8 +4,7 @@ name=autoconf
 version=2.69
 release=3
 options=('bootstrap')
-source=("http://ftp.gnu.org/gnu/$name/$name-$version.tar.xz" autoconf-2.69-libtool-compatibility.patch)
-sha256sums=('64ebcec9f8ac5b2487125a86a7760d2591ac9e1d3dbd59489633f9de62a57684' '51528119b9bb09235829bb6f4841019426c4d221c6c944ffe43ff7bf2b601c0f')
+source="http://ftp.gnu.org/gnu/$name/$name-$version.tar.xz" autoconf-2.69-libtool-compatibility.patch)
 
 build() {
 	cd "$SRC"/$name-$version

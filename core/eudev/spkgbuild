@@ -3,8 +3,7 @@
 name=eudev
 version=3.2.9
 release=1
-source=("https://dev.gentoo.org/~blueness/eudev/$name-$version.tar.gz")
-sha256sum=('89618619084a19e1451d373c43f141b469c9fd09767973d73dd268b92074d4fc')
+source="https://dev.gentoo.org/~blueness/eudev/$name-$version.tar.gz"
 
 build() {
 	cd "$SRC"/$name-$version

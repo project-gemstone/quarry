@@ -3,8 +3,7 @@
 name=libcap-ng
 version=0.7.10
 release=1
-source=("https://github.com/stevegrubb/libcap-ng/archive/v$version.tar.gz")
-sha256sums=('1b93c7f5c20ae5cc705fe5244af3e299454e988388cda95f006e248d97c0713e77da2a81c67ecf15755f3958df373fc6d1ca14197d6357ab1f2d8c3a0fd12def')
+source="https://github.com/stevegrubb/libcap-ng/archive/v$version.tar.gz"
 
 build() {
 	cd "$SRC"/$name-$version

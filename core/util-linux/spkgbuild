@@ -7,7 +7,7 @@ case $version in
 	*.*) _v=$version ;;
 esac
 release=1
-source=("https://www.kernel.org/pub/linux/utils/util-linux/v${_v}/$name-$version.tar.xz")
+source="https://www.kernel.org/pub/linux/utils/util-linux/v${_v}/$name-$version.tar.xz"
 
 build() {
 	cd "$SRC"/$name-$version

@@ -3,8 +3,7 @@
 name=libelf
 version=0.177
 release=1
-source=("https://sourceware.org/elfutils/ftp/$version/elfutils-$version.tar.bz2")
-sha256sums=(fa489deccbcae7d8c920f60d85906124c1989c591196d90e0fd668e3dc05042e)
+source="https://sourceware.org/elfutils/ftp/$version/elfutils-$version.tar.bz2"
 
 build() {
 	cd "$SRC"/elfutils-$version

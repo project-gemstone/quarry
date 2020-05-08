@@ -3,8 +3,7 @@
 name=grep
 version=3.3
 release=1
-source=("http://ftp.gnu.org/gnu/$name/$name-$version.tar.xz")
-sha256sums=(b960541c499619efd6afe1fa795402e4733c8e11ebf9fafccc0bb4bccdc5b514)
+source="http://ftp.gnu.org/gnu/$name/$name-$version.tar.xz"
 
 build() {
 	cd "$SRC"/$name-$version

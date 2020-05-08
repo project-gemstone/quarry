@@ -3,8 +3,7 @@
 name=sed
 version=4.7
 release=1
-source=("http://ftp.gnu.org/gnu/$name/$name-$version.tar.xz")
-sha256sums=(2885768cd0a29ff8d58a6280a270ff161f6a3deb5690b2be6c49f46d4c67bd6a)
+source="http://ftp.gnu.org/gnu/$name/$name-$version.tar.xz"
 
 build() {
 	cd "$SRC"/$name-$version

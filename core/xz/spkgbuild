@@ -3,8 +3,7 @@
 name=xz
 version=5.2.4
 release=1
-source=("https://tukaani.org/$name/$name-$version.tar.gz")
-sha256sums=(b512f3b726d3b37b6dc4c8570e137b9311e7552e8ccbab4d39d47ce5f4177145)
+source="https://tukaani.org/$name/$name-$version.tar.gz"
 
 build() {
 	cd "$SRC"/$name-$version

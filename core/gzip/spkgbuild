@@ -4,7 +4,6 @@ name=gzip
 version=1.10
 release=1
 source=(http://ftpmirror.gnu.org/gnu/$name/$name-$version.tar.gz)
-sha256sums=(c91f74430bf7bc20402e1f657d0b252cb80aa66ba333a25704512af346633c68)
 
 build() {
 	cd $name-$version

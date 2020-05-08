@@ -5,12 +5,12 @@ version=9.2.0
 isl_version=0.19
 release=1
 options=(!strip)
-source=(http://ftpmirror.gnu.org/gnu/gcc/gcc-$version/gcc-$version.tar.xz "http://isl.gforge.inria.fr/isl-$isl_version.tar.xz" "gcc-pure64.patch" "c89" "c99")
-sha256sums=('ea6ef08f121239da5695f76c9b33637a118dcf63e24164422231917fa61fb206'
-            '6d6c1aa00e2a6dfc509fa46d9a9dbe93af0c451e196a670577a148feecf6b8a5'
-	    'd7020f38d6c81ee4e537bc0a4f9498b067326ac30f80be5865d33cf146e2c59d'
-	    'de48736f6e4153f03d0a5d38ceb6c6fdb7f054e8f47ddd6af0a3dbf14f27b931'
-	    '089cde15db1c6a0e597729b073a65ac6c913e4e236abd10d3a881757d8792c0b')
+source1="http://ftpmirror.gnu.org/gnu/gcc/gcc-$version/gcc-$version.tar.xz"
+source2="http://isl.gforge.inria.fr/isl-$isl_version.tar.xz" 
+source3="gcc-pure64.patch" 
+source4="c89" 
+source5="c99"
+
 
 build() {
 	if [ -z "$XTARGET" ]; then

@@ -3,8 +3,7 @@
 name=tar
 version=1.32
 release=1
-source=("http://ftp.gnu.org/gnu/$name/$name-$version.tar.xz")
-sha256sums=(d0d3ae07f103323be809bc3eac0dcc386d52c5262499fe05511ac4788af1fdd8)
+source="http://ftp.gnu.org/gnu/$name/$name-$version.tar.xz"
 
 build() {
 	cd "$SRC"/$name-$version

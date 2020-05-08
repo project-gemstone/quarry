@@ -3,8 +3,7 @@
 name=attr
 version=2.4.48
 release=1
-source=("https://download.savannah.gnu.org/releases/$name/$name-$version.tar.gz")
-sha256sums=('5ead72b358ec709ed00bbf7a9eaef1654baad937c001c044fe8b74c57f5324e7')
+source="https://download.savannah.gnu.org/releases/$name/$name-$version.tar.gz"
 
 build() {
 	cd "$SRC"/$name-$version

@@ -3,10 +3,9 @@
 name=findutils
 version=4.6.0
 release=1
-source=("http://ftp.gnu.org/gnu/$name/$name-$version.tar.gz" findutils-makedev.patch findutils-fflush.patch)
-sha256sums=('ded4c9f73731cd48fec3b6bdaccce896473b6d8e337e9612e16cf1431bb1169d'
-           'e9e961644522919b8300c4e57ef5373103aedb37dc370a6d1dc96e85a815dace'
-           '84b916c0bf8c51b7e7b28417692f0ad3e7030d1f3c248ba77c42ede5c1c5d11e')
+source1="http://ftp.gnu.org/gnu/$name/$name-$version.tar.gz" 
+source2=findutils-makedev.patch 
+source3=findutils-fflush.patch
 
 build() {
 	cd "$SRC"/$name-$version

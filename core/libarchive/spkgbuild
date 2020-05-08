@@ -3,9 +3,9 @@
 name=libarchive
 version=3.4.0
 release=1
-source=("https://www.libarchive.org/downloads/$name-$version.tar.gz" "libarchive-3.3.3-libressl.patch")
-sha256sums=('8643d50ed40c759f5412a3af4e353cffbce4fdf3b5cf321cb72cacf06b2d825e'
-           '8f5b890c73b695ce05a10c2bd6788a1ffd111a19944969e4692f6163fe38bda6')
+source1="https://www.libarchive.org/downloads/$name-$version.tar.gz" 
+source2="libarchive-3.3.3-libressl.patch"
+
 
 build() {
 	cd "$SRC"/$name-$version
