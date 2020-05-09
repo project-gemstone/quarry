@@ -4,7 +4,8 @@ name=autoconf
 version=2.69
 release=3
 options="bootstrap"
-source="http://ftp.gnu.org/gnu/$name/$name-$version.tar.xz" autoconf-2.69-libtool-compatibility.patch)
+source1="http://ftp.gnu.org/gnu/$name/$name-$version.tar.xz" 
+source2="autoconf-2.69-libtool-compatibility.patch"
 
 build() {
 	cd "$SRC"/$name-$version
