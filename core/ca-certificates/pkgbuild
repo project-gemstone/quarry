@@ -11,7 +11,7 @@ source3=c_rehash.c
 build() {
 	mkdir -p "$PKG"/usr/bin
 
-	cd "$SRC"/$name-$version
+	cd "$SRC"/$name-$version || exit
 	HOSTCC=${HOSTCC:-cc}
 
 	cat >sbin/Makefile <<EOF
@@ -35,7 +35,7 @@ EOF
 
 	make
 
-	${CROSS_COMPILE}cc ../c_rehash.c -o "$PKG"/usr/bin/c_rehash -lssl -lcrypto -lz $CFLAGS
+	"${CROSS_COMPILE}"cc ../c_rehash.c -o "$PKG"/usr/bin/c_rehash -lssl -lcrypto -lz "$CFLAGS"
 
 	make DESTDIR="$PKG" SBINDIR=/usr/bin install
 
@@ -45,14 +45,14 @@ EOF
 
 	cat "$PKG"/usr/share/ca-certificates/*/*.crt >"$PKG"/etc/ssl/certs/ca-certificates.crt
 
-	cd "$PKG"
+	cd "$PKG" || exit
 	for i in etc/ssl/certs/*; do
 		test ! -L "$i" && continue
-		s=$(readlink "$i"
+		s=$(readlink "$i")
 		p=$(printf "%s" "$s" | awk '{n=split($0, a, "/share"; if(n>1)print a[n];}')
 		if test -n "$p"; then
-			nl=$(printf "../../../share%s" "$p"
-			ln -sf "$nl" "$i"
+		   nl=$(printf "../../../share%s" "$p")
+		   ln -sf "$nl" "$i"
 		fi
 	done
 }
