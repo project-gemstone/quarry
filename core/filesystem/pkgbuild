@@ -4,30 +4,7 @@ name=filesystem
 version=0.1
 release=1
 options="!strip"
-
-source1=ld.so.conf
-source2=blacklist.conf
-source3=crypttab
-source4=espdiff
-source5=fstab
-source6=genfstab
-source7=group
-source8=gshadow
-source9=host.conf
-source10=hosts
-source11=issue
-source12=issue.net
-source13=motd
-source14=os-release
-source15=passwd
-source16=profile
-source17=protocols
-source18=resolv.conf
-source19=securetty
-source20=services
-source21=shadow
-source22=shells
-source23=sysctl
+source="securetty services shadow shells sysctl ld.so.conf blacklist.conf crypttab espdiff fstab genfstab group gshadow host.conf hosts issue issue.net motd os-release passwd profile protols resolv.conf"
 
 build() {
 	cd "$PKG"

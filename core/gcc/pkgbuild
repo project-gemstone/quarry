@@ -5,12 +5,7 @@ version=9.2.0
 isl_version=0.19
 release=1
 options="!strip"
-source1="http://ftpmirror.gnu.org/gnu/gcc/gcc-$version/gcc-$version.tar.xz"
-source2="http://isl.gforge.inria.fr/isl-$isl_version.tar.xz" 
-source3="gcc-pure64.patch" 
-source4="c89" 
-source5="c99"
-
+source="http://ftpmirror.gnu.org/gnu/gcc/gcc-$version/gcc-$version.tar.xz http://isl.gforge.inria.fr/isl-$isl_version.tar.xz gcc-pure64.patch c99 c89"
 
 build() {
 	if [ -z "$XTARGET" ]; then

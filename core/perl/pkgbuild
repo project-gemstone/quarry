@@ -4,8 +4,7 @@ name=perl
 version=5.30.0
 crossver=1953992aafbdeda16ed8aeaddccca46904627bf1
 release=1
-source1="https://www.cpan.org/src/5.0/$name-$version.tar.xz"
-source2="https://github.com/arsv/perl-cross/archive/$crossver.tar.gz"
+source="https://www.cpan.org/src/5.0/$name-$version.tar.xz https://github.com/arsv/perl-cross/archive/$crossver.tar.gz"
 
 build() {
 	cd "$SRC"

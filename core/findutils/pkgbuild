@@ -3,9 +3,7 @@
 name=findutils
 version=4.6.0
 release=1
-source1="http://ftp.gnu.org/gnu/$name/$name-$version.tar.gz" 
-source2=findutils-makedev.patch 
-source3=findutils-fflush.patch
+source="http://ftp.gnu.org/gnu/$name/$name-$version.tar.gz findutils-makedev.patch findutils-fflush.patch" 
 
 build() {
 	cd "$SRC"/$name-$version

@@ -3,10 +3,7 @@
 name=ca-certificates
 version=20190110
 release=1
-source="http://deb.debian.org/debian/pool/main/c/ca-certificates/ca-certificates_${version}.tar.xz" 
-source2=certdata2pem.c 
-source3=c_rehash.c
-
+source="c_rehash.c certdata2pem.c http://deb.debian.org/debian/pool/main/c/ca-certificates/ca-certificates_${version}.tar.xz" 
 
 build() {
 	mkdir -p "$PKG"/usr/bin
