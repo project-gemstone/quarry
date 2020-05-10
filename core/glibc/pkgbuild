@@ -4,7 +4,7 @@ name=glibc
 version=2.29
 release=1
 options="buildflags !emptydirs makeflags !strip !zipman"
-source=(http://ftpmirror.gnu.org/gnu/glibc/glibc-$version.tar.xz)
+source="http://ftpmirror.gnu.org/gnu/glibc/glibc-$version.tar.xz"
 
 build() {
 	cd glibc-$version
