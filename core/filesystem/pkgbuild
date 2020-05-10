@@ -4,7 +4,7 @@ name=filesystem
 version=0.1
 release=1
 options="!strip"
-source="securetty services shadow shells sysctl ld.so.conf blacklist.conf crypttab espdiff fstab genfstab group gshadow host.conf hosts issue issue.net motd os-release passwd profile protols resolv.conf"
+source="securetty services shadow shells sysctl ld.so.conf blacklist.conf crypttab espdiff fstab genfstab group gshadow host.conf hosts issue issue.net motd os-release passwd profile protocols resolv.conf"
 
 build() {
 	cd "$PKG"
