@@ -9,7 +9,7 @@ source="https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-$version.tar.xz"
 build() {
 	cd "$SRC"/linux-$version
 
-	case $BUILD_ARCH in
+	case $BARCH in
 		amd64 | x86_64)
 			export XKARCH="x86_64"
 			;;
