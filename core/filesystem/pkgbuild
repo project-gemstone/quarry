@@ -57,7 +57,7 @@ build() {
 		install -d -m755 usr/local/$d
 	done
 
-	install -m644 $SRC/blacklist.conf "$PKG"/etc/modprobe.d/10-blacklist.conf
+	install -D -m644 $SRC/blacklist.conf "$PKG"/etc/modprobe.d/10-blacklist.conf
 
 	install -D -m644 $SRC/sysctl "$PKG"/etc/sysctl.d/10-default.conf
 
