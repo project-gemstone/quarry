@@ -29,10 +29,11 @@ build() {
 	      --prefix=/usr \
 	      --libdir=/usr/lib \
 	      --libexecdir=/usr/lib \
+	      --with-headers=/usr/include \
 	      --build=$XHOST \
 	      --host=$XTARGET \
 	      --target=$XTARGET \
-              --with-pkgversion="Gemstone Linux $version targeting $BUILD_ARCH" \
+              --with-pkgversion="Dragoon Linux $version targeting $BUILD_ARCH" \
               --with-bugurl="https://github.com/project-gemstone/gemstone/issues" \
 	      --without-gd \
 	      --without-selinux \
