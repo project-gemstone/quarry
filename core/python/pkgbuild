@@ -17,24 +17,24 @@ build() {
         echo ac_cv_file__dev_ptc=no >> ./config.site
 
 	CONFIG_SITE=config.site ./configure $BUILDFLAGS \
-		--prefix=/usr \
-		--with-computed-gotos \
-		--with-dbmliborder=gdbm:ndbm \
-		--with-ensurepip=yes \
-		--with-lto \
-		--with-system-expat \
-		--with-system-ffi \
-		--with-threads \
-		--enable-ipv6 \
-		--enable-loadable-sqlite-extensions \
-		--enable-shared \
-		--disable-rpath
+					--prefix=/usr \
+					--with-computed-gotos \
+					--with-dbmliborder=gdbm:ndbm \
+					--with-ensurepip=yes \
+					--with-lto \
+					--with-system-expat \
+					--with-system-ffi \
+					--with-threads \
+					--disable-ipv6 \
+					--enable-loadable-sqlite-extensions \
+					--enable-shared \
+					--disable-rpath
 	
-  make EXTRA_CFLAGS="$CFLAGS -DTHREAD_STACK_SIZE=0x100000"
+        make EXTRA_CFLAGS="$CFLAGS -DTHREAD_STACK_SIZE=0x100000"
 
 	sed -i 's/^all:.*$/all: build_all/' Makefile
 	
-  make EXTRA_CFLAGS="$CFLAGS -DTHREAD_STACK_SIZE=0x100000" DESTDIR="$PKG" install
+        make EXTRA_CFLAGS="$CFLAGS -DTHREAD_STACK_SIZE=0x100000" DESTDIR="$PKG" install
 
 	ln -sf python3 "$PKG"/usr/bin/python
 	ln -sf python3-config "$PKG"/usr/bin/python-config
