@@ -6,17 +6,17 @@ release=1
 source="http://dist.schmorp.de/$name/Attic/$name-$version.tar.gz"
 
 build() {
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	libtoolize --force && aclocal -I m4 && autoheader && autoconf && automake --add-missing
+  libtoolize --force && aclocal -I m4 && autoheader && autoconf && automake --add-missing
 
-	./configure $BUILDFLAGS \
-		--prefix=/usr \
-		--disable-nls
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --disable-nls
 
-	make
+  make
 
-	make DESTDIR="$PKG" install
+  make DESTDIR="$PKG" install
 
-	rm "$PKG"/usr/include/event.h
+  rm "$PKG"/usr/include/event.h
 }

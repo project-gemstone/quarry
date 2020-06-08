@@ -6,18 +6,18 @@ release=1
 source="http://ftp.gnu.org/gnu/$name/$name-$version.tar.bz2"
 
 build() {
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	sed -i '211,217 d; 219,229 d; 232 d' glob/glob.c
+  sed -i '211,217 d; 219,229 d; 232 d' glob/glob.c
 
-	./configure $BUILDFLAGS \
-		--prefix=/usr \
-		--without-guile \
-		--without-dmalloc
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --without-guile \
+    --without-dmalloc
 
-	make
+  make
 
-	make DESTDIR="$PKG" install
+  make DESTDIR="$PKG" install
 
-	ln -sf make "$PKG"/usr/bin/gmake
+  ln -sf make "$PKG"/usr/bin/gmake
 }

@@ -7,52 +7,52 @@ options="buildflags !emptydirs makeflags !strip !zipman"
 source="https://ftp.gnu.org/gnu/glibc/glibc-$version.tar.xz"
 
 build() {
-	cd glibc-$version
+  cd glibc-$version
 
-	mkdir build && cd build
+  mkdir build && cd build
 
-	echo "libc_cv_forced_unwind=yes" > config.cache
-	echo "libc_cv_c_cleanup=yes" >> config.cache
-	echo "libc_cv_ssp=no" >> config.cache
-	echo "libc_cv_ssp_strong=no" >> config.cache
-		
-	echo "slibdir=/usr/lib" >> configparms
-	echo "rtlddir=/usr/lib" >> configparms
-	echo "sbindir=/usr/bin" >> configparms
-	echo "rootsbindir=/usr/bin" >> configparms
+  echo "libc_cv_forced_unwind=yes" >config.cache
+  echo "libc_cv_c_cleanup=yes" >>config.cache
+  echo "libc_cv_ssp=no" >>config.cache
+  echo "libc_cv_ssp_strong=no" >>config.cache
 
-	BUILD_CC="$HOSTCC" \
-	CC="$XTARGET-gcc" \
-	AR="$XTARGET-ar" \
-	RANLIB="$XTARGET-ranlib" \
-	      ../configure \
-	      --prefix=/usr \
-	      --libdir=/usr/lib \
-	      --libexecdir=/usr/lib \
-	      --with-headers=/usr/include \
-	      --build=$XHOST \
-	      --host=$XTARGET \
-	      --target=$XTARGET \
-              --with-pkgversion="Dragoon Linux $version targeting $BUILD_ARCH" \
-              --with-bugurl="https://github.com/project-gemstone/gemstone/issues" \
-	      --without-gd \
-	      --without-selinux \
-	      --enable-add-ons \
-	      --enable-bind-now \
-	      --enable-kernel=3.2 \
-	      --enable-lock-elision \
-	      --enable-stack-protector=strong \
-	      --enable-stackguard-randomization \
-	      --disable-profile \
-	      --disable-werror \
-	      --enable-shared \
-	      --cache-file=config.cache
+  echo "slibdir=/usr/lib" >>configparms
+  echo "rtlddir=/usr/lib" >>configparms
+  echo "sbindir=/usr/bin" >>configparms
+  echo "rootsbindir=/usr/bin" >>configparms
 
-	make -j1
+  BUILD_CC="$HOSTCC" \
+    CC="$XTARGET-gcc" \
+    AR="$XTARGET-ar" \
+    RANLIB="$XTARGET-ranlib" \
+    ../configure \
+    --prefix=/usr \
+    --libdir=/usr/lib \
+    --libexecdir=/usr/lib \
+    --with-headers=/usr/include \
+    --build=$XHOST \
+    --host=$XTARGET \
+    --target=$XTARGET \
+    --with-pkgversion="Dragoon Linux $version targeting $BUILD_ARCH" \
+    --with-bugurl="https://github.com/project-gemstone/gemstone/issues" \
+    --without-gd \
+    --without-selinux \
+    --enable-add-ons \
+    --enable-bind-now \
+    --enable-kernel=3.2 \
+    --enable-lock-elision \
+    --enable-stack-protector=strong \
+    --enable-stackguard-randomization \
+    --disable-profile \
+    --disable-werror \
+    --enable-shared \
+    --cache-file=config.cache
 
-	make install_root=$PKG install
-	
-	mkdir -p "$PKG"/usr/bin
-	
-	ln -sf ../lib/libc.so "$PKG"/usr/bin/ldd
+  make -j1
+
+  make install_root=$PKG install
+
+  mkdir -p "$PKG"/usr/bin
+
+  ln -sf ../lib/libc.so "$PKG"/usr/bin/ldd
 }

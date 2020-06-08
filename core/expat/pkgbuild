@@ -6,11 +6,11 @@ release=1
 source="https://github.com/libexpat/libexpat/releases/download/R_${version//./_}/expat-${version}.tar.bz2"
 
 build() {
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	./configure $BUILDFLAGS --prefix=/usr
+  ./configure $BUILDFLAGS --prefix=/usr
 
-	make
+  make
 
-	make DESTDIR="$PKG" install
+  make DESTDIR="$PKG" install
 }

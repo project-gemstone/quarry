@@ -6,15 +6,15 @@ release=1
 source="https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/$name-$version.tar.gz"
 
 build() {
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	autoreconf -fi
+  autoreconf -fi
 
-	./configure $BUILDFLAGS \
-		--prefix=/usr \
-		--with-openssldir=/etc/ssl
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --with-openssldir=/etc/ssl
 
-	make
+  make
 
-	make DESTDIR="$PKG" install
+  make DESTDIR="$PKG" install
 }

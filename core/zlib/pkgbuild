@@ -6,15 +6,15 @@ release=1
 source="https://zlib.net/$name-$version.tar.xz"
 
 build() {
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	if [ "$BOOTSTRAP" = "yes" ]; then
-		export CHOST="$XTARGET"
-	fi
+  if [ "$BOOTSTRAP" = "yes" ]; then
+    export CHOST="$XTARGET"
+  fi
 
-	./configure --prefix=/usr
+  ./configure --prefix=/usr
 
-	make
+  make
 
-	make DESTDIR="$PKG" install
+  make DESTDIR="$PKG" install
 }

@@ -13,6 +13,6 @@ build() {
   make
 
   make DESTDIR=$PKG install
-  
+
   rm -f $PKG/usr/share/man/man8/rmt.8
 }

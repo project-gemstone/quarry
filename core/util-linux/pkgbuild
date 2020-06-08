@@ -3,39 +3,39 @@
 name=util-linux
 version=2.34
 case $version in
-	*.*.*) _v=${version%.*} ;;
-	*.*) _v=$version ;;
+  *.*.*) _v=${version%.*} ;;
+  *.*) _v=$version ;;
 esac
 release=1
 source="https://www.kernel.org/pub/linux/utils/util-linux/v${_v}/$name-$version.tar.xz"
 
 build() {
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	ADJTIME_PATH=/var/lib/hwclock/adjtime \
-		./configure \
-		--prefix=/usr \
-		--libdir=/usr/lib \
-		--bindir=/usr/bin \
-		--localstatedir=/var \
-		--enable-fs-paths-extra=/usr/bin \
-		--enable-kill \
-		--enable-partx \
-		--enable-raw \
-		--enable-write \
-		--disable-chfn-chsh \
-		--disable-login \
-		--disable-nologin \
-		--disable-runuser \
-		--disable-setpriv
+  ADJTIME_PATH=/var/lib/hwclock/adjtime \
+    ./configure \
+    --prefix=/usr \
+    --libdir=/usr/lib \
+    --bindir=/usr/bin \
+    --localstatedir=/var \
+    --enable-fs-paths-extra=/usr/bin \
+    --enable-kill \
+    --enable-partx \
+    --enable-raw \
+    --enable-write \
+    --disable-chfn-chsh \
+    --disable-login \
+    --disable-nologin \
+    --disable-runuser \
+    --disable-setpriv
 
-	make
+  make
 
-	make DESTDIR="$PKG" install
+  make DESTDIR="$PKG" install
 
-	mkdir -p $PKG/var/lib/hwclock
+  mkdir -p $PKG/var/lib/hwclock
 
-	mv $PKG/{,usr/}sbin/* $PKG/usr/bin
+  mv $PKG/{,usr/}sbin/* $PKG/usr/bin
 
-	rmdir $PKG/sbin $PKG/usr/sbin
+  rmdir $PKG/sbin $PKG/usr/sbin
 }

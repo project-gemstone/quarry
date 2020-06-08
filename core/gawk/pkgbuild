@@ -6,15 +6,15 @@ release=1
 source="http://ftp.gnu.org/gnu/$name/$name-$version.tar.gz"
 
 build() {
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	./configure $BUILDFLAGS \
-		--prefix=/usr \
-		--libexecdir=/usr/lib \
-		--sysconfdir=/etc \
-		--without-libsigsegv
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --libexecdir=/usr/lib \
+    --sysconfdir=/etc \
+    --without-libsigsegv
 
-	make
+  make
 
-	make DESTDIR="$PKG" install
+  make DESTDIR="$PKG" install
 }

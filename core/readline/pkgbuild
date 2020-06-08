@@ -7,20 +7,20 @@ release=1
 source=(http://ftpmirror.gnu.org/gnu/$name/$name-${version}.tar.gz https://ftpmirror.gnu.org/gnu/$name/$name-${version}-patches/$name${strippedver}-001)
 
 build() {
-	cd $name-${version}
+  cd $name-${version}
 
-	patch -p0 -i $SRC/$name${strippedver}-001
+  patch -p0 -i $SRC/$name${strippedver}-001
 
-	sed -i '/MV.*old/d' Makefile.in
+  sed -i '/MV.*old/d' Makefile.in
 
-	sed -i '/{OLDSUFF}/c:' support/shlib-install
+  sed -i '/{OLDSUFF}/c:' support/shlib-install
 
-	./configure $BUILDFLAGS \
-		--prefix=/usr \
-		--enable-shared \
-		--enable-static
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --enable-shared \
+    --enable-static
 
-	make SHLIB_LIBS='-L$SYSROOT_DIR/usr/lib -lncurses'
+  make SHLIB_LIBS='-L$SYSROOT_DIR/usr/lib -lncurses'
 
-	make SHLIB_LIBS="-L$SYSROOT_DIR/usr/lib -lncursesw" DESTDIR="$PKG" install
+  make SHLIB_LIBS="-L$SYSROOT_DIR/usr/lib -lncursesw" DESTDIR="$PKG" install
 }

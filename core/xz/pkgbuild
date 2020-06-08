@@ -6,20 +6,20 @@ release=1
 source="https://tukaani.org/$name/$name-$version.tar.gz"
 
 build() {
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	./configure $BUILDFLAGS \
-		--prefix=/usr \
-		--disable-doc \
-		--disable-nls \
-		--disable-rpath \
-		--disable-werror
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --disable-doc \
+    --disable-nls \
+    --disable-rpath \
+    --disable-werror
 
-	sed -i -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
-		-e 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' \
-		libtool
+  sed -i -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
+    -e 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' \
+    libtool
 
-	make
+  make
 
-	make DESTDIR="$PKG" install
+  make DESTDIR="$PKG" install
 }

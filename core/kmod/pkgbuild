@@ -6,21 +6,21 @@ release=1
 source="https://www.kernel.org/pub/linux/utils/kernel/$name/$name-$version.tar.xz"
 
 build() {
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	./configure $BUILDFLAGS \
-		--prefix=/usr \
-		--bindir=/bin \
-		--sysconfdir=/etc \
-		--with-rootlibdir=/lib \
-		--disable-gtk-doc \
-		--with-xz \
-		--with-zlib \
-		--disable-manpages
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --bindir=/bin \
+    --sysconfdir=/etc \
+    --with-rootlibdir=/lib \
+    --disable-gtk-doc \
+    --with-xz \
+    --with-zlib \
+    --disable-manpages
 
-	make -j1
+  make -j1
 
-	make DESTDIR="$PKG" install
+  make DESTDIR="$PKG" install
 
-	install -dm755 "$PKG"/{etc,usr/lib}/{depmod,modprobe}.d
+  install -dm755 "$PKG"/{etc,usr/lib}/{depmod,modprobe}.d
 }

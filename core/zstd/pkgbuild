@@ -6,11 +6,11 @@ release=1
 source="https://github.com/facebook/zstd/releases/download/v$version/$name-$version.tar.gz"
 
 build() {
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	unset CPPFLAGS
+  unset CPPFLAGS
 
-	make HAVE_PTHREAD=1 HAVE_ZLIB=1 HAVE_LZMA=1 HAVE_LZ4=1 MOREFLAGS="-O3"
+  make HAVE_PTHREAD=1 HAVE_ZLIB=1 HAVE_LZMA=1 HAVE_LZ4=1 MOREFLAGS="-O3"
 
-	make PREFIX=/usr DESTDIR="$PKG" install
+  make PREFIX=/usr DESTDIR="$PKG" install
 }

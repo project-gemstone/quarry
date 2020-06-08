@@ -6,15 +6,15 @@ release=1
 source="ftp://ftp.astron.com/pub/$name/$name-$version.tar.gz"
 
 build() {
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	./configure $BUILDFLAGS \
-		--prefix=/usr \
-		--datadir=/usr/share/file \
-		--enable-fsect-man5 \
-		--disable-libseccomp
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --datadir=/usr/share/file \
+    --enable-fsect-man5 \
+    --disable-libseccomp
 
-	make
+  make
 
-	make DESTDIR="$PKG" install
+  make DESTDIR="$PKG" install
 }

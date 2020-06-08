@@ -6,9 +6,9 @@ release=1
 source="$name-$version.tar.gz::https://github.com/lz4/lz4/archive/v$version.tar.gz"
 
 build() {
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	make PREFIX=/usr
+  make PREFIX=/usr
 
-	make PREFIX=/usr DESTDIR="$PKG" install
+  make PREFIX=/usr DESTDIR="$PKG" install
 }

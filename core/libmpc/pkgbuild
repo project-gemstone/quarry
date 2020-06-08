@@ -6,11 +6,11 @@ release=1
 source="http://ftp.gnu.org/gnu/mpc/mpc-$version.tar.gz"
 
 build() {
-	cd "$SRC"/mpc-$version
+  cd "$SRC"/mpc-$version
 
-	EGREP=egrep ./configure $BUILDFLAGS --prefix=/usr --enable-shared
+  EGREP=egrep ./configure $BUILDFLAGS --prefix=/usr --enable-shared
 
-	make
+  make
 
-	make DESTDIR="$PKG" install
+  make DESTDIR="$PKG" install
 }

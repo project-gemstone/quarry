@@ -6,29 +6,29 @@ release=2
 source="http://ftp.gnu.org/gnu/$name/$name-$version.tar.xz"
 
 build() {
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	autoreconf -fiv
+  autoreconf -fiv
 
-	export FORCE_UNSAFE_CONFIGURE=1
+  export FORCE_UNSAFE_CONFIGURE=1
 
-	PERL=missing \
-		MAKEINFO=true \
-		./configure $BUILDFLAGS \
-		--prefix=/usr \
-		--libexecdir=/usr/lib \
-		--with-openssl
+  PERL=missing \
+    MAKEINFO=true \
+    ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --libexecdir=/usr/lib \
+    --with-openssl
 
-	make
+  make
 
-	make DESTDIR="$PKG" install
+  make DESTDIR="$PKG" install
 
-	(
-		cd "$PKG"/usr/bin
-		ln -sf install ginstall
-	)
-	(
-		cd "$PKG"/usr/share/man/man1
-		ln -sf install.1 ginstall.1
-	)
+  (
+    cd "$PKG"/usr/bin
+    ln -sf install ginstall
+  )
+  (
+    cd "$PKG"/usr/share/man/man1
+    ln -sf install.1 ginstall.1
+  )
 }

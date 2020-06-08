@@ -6,13 +6,13 @@ release=1
 source="https://ftp.gnu.org/gnu/bc/$name-$version.tar.gz"
 
 build() {
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	PREFIX=/usr ./configure.sh --disable-nls
+  PREFIX=/usr ./configure.sh --disable-nls
 
-	make PREFIX=/usr
+  make PREFIX=/usr
 
-	make PREFIX=/usr DESTDIR="$PKG" install
+  make PREFIX=/usr DESTDIR="$PKG" install
 
-	rm -rf "$PKG"/usr/share/locale
+  rm -rf "$PKG"/usr/share/locale
 }

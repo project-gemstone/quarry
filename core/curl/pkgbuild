@@ -6,29 +6,29 @@ release=1
 source="https://curl.haxx.se/download/$name-$version.tar.gz"
 
 build() {
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	./configure $BUILDFLAGS \
-		--prefix=/usr \
-		--mandir=/usr/share/man \
-		--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt \
-		--with-libssh2 \
-		--with-nghttp2 \
-		--with-pic \
-		--with-random=/dev/urandom \
-		--enable-ipv6 \
-		--enable-threaded-resolver \
-		--enable-versioned-symbols \
-		--without-gssapi \
-		--disable-ldap \
-		--disable-ldaps \
-		--disable-manual \
-		--disable-ntlm-wb \
-		ac_cv_sizeof_off_t=8
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --mandir=/usr/share/man \
+    --with-ca-bundle=/etc/ssl/certs/ca-certificates.crt \
+    --with-libssh2 \
+    --with-nghttp2 \
+    --with-pic \
+    --with-random=/dev/urandom \
+    --enable-ipv6 \
+    --enable-threaded-resolver \
+    --enable-versioned-symbols \
+    --without-gssapi \
+    --disable-ldap \
+    --disable-ldaps \
+    --disable-manual \
+    --disable-ntlm-wb \
+    ac_cv_sizeof_off_t=8
 
-	make
+  make
 
-	make DESTDIR="$PKG" install
+  make DESTDIR="$PKG" install
 
-	make DESTDIR="$PKG" install -C scripts
+  make DESTDIR="$PKG" install -C scripts
 }

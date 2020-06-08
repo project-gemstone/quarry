@@ -6,47 +6,47 @@ release=2
 source="http://ftp.gnu.org/gnu/$name/$name-$version.tar.xz"
 
 build() {
-	case "$BARCH" in
-		*) HASHCONFIG="--enable-default-hash-style=gnu" ;;
-	esac
+  case "$BARCH" in
+    *) HASHCONFIG="--enable-default-hash-style=gnu" ;;
+  esac
 
-	case "$BARCH" in
-		amd64 | x86_64) ARCHCONFIG="--enable-targets=x86_64-pep" ;;
-	esac
+  case "$BARCH" in
+    amd64 | x86_64) ARCHCONFIG="--enable-targets=x86_64-pep" ;;
+  esac
 
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	mkdir build
+  mkdir build
 
-	cd build
+  cd build
 
-	../configure $TOOLFLAGS $ARCHCONFIG $HASHCONFIG \
-		--prefix=/usr \
-		--with-bugurl="https://github.com/junland/bdk/issues" \
-		--with-lib-path="/usr/lib:/local/usr/lib" \
-		--with-pic \
-		--with-system-zlib \
-		--enable-64-bit-bfd \
-		--enable-deterministic-archives \
-		--enable-gold \
-		--enable-ld=default \
-		--enable-lto \
-		--enable-plugins \
-		--enable-relro \
-		--enable-shared \
-		--enable-threads \
-		--disable-compressed-debug-sections \
-		--disable-multilib \
-		--disable-nls \
-		--disable-werror
+  ../configure $TOOLFLAGS $ARCHCONFIG $HASHCONFIG \
+    --prefix=/usr \
+    --with-bugurl="https://github.com/junland/bdk/issues" \
+    --with-lib-path="/usr/lib:/local/usr/lib" \
+    --with-pic \
+    --with-system-zlib \
+    --enable-64-bit-bfd \
+    --enable-deterministic-archives \
+    --enable-gold \
+    --enable-ld=default \
+    --enable-lto \
+    --enable-plugins \
+    --enable-relro \
+    --enable-shared \
+    --enable-threads \
+    --disable-compressed-debug-sections \
+    --disable-multilib \
+    --disable-nls \
+    --disable-werror
 
-	make MAKEINFO="true" configure-host
+  make MAKEINFO="true" configure-host
 
-	make MAKEINFO="true" tooldir=/usr
+  make MAKEINFO="true" tooldir=/usr
 
-	make MAKEINFO="true" tooldir=/usr DESTDIR="$PKG" install
+  make MAKEINFO="true" tooldir=/usr DESTDIR="$PKG" install
 
-	rm -rf "$PKG"/usr/bin/ld
+  rm -rf "$PKG"/usr/bin/ld
 
-	ln -sf ld.bfd "$PKG"/usr/bin/ld
+  ln -sf ld.bfd "$PKG"/usr/bin/ld
 }

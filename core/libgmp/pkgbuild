@@ -6,13 +6,13 @@ release=1
 source="http://ftp.gnu.org/gnu/gmp/gmp-$version.tar.xz"
 
 build() {
-	cd "$SRC"/gmp-$version
+  cd "$SRC"/gmp-$version
 
-	./configure $BUILDFLAGS \
-		--prefix=/usr \
-		--enable-cxx
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --enable-cxx
 
-	make
+  make
 
-	make DESTDIR="$PKG" install
+  make DESTDIR="$PKG" install
 }

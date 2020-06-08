@@ -6,13 +6,13 @@ release=1
 source="https://www.libssh2.org/download/$name-$version.tar.gz"
 
 build() {
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	./configure $BUILDFLAGS \
-		--prefix=/usr \
-		--with-libssl-prefix="$SYSROOT_DIR"/usr
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --with-libssl-prefix="$SYSROOT_DIR"/usr
 
-	make
+  make
 
-	make DESTDIR="$PKG" install
+  make DESTDIR="$PKG" install
 }

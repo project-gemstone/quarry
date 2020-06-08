@@ -6,13 +6,13 @@ release=1
 source="https://c-ares.haxx.se/download/$name-$version.tar.gz"
 
 build() {
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	./configure $BUILDFLAGS \
-		--prefix=/usr \
-		--enable-shared
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --enable-shared
 
-	make
+  make
 
-	make DESTDIR="$PKG" install
+  make DESTDIR="$PKG" install
 }

@@ -7,33 +7,33 @@ options="!emptydirs"
 source="https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-$version.tar.xz"
 
 build() {
-	cd "$SRC"/linux-$version
+  cd "$SRC"/linux-$version
 
-	case $BARCH in
-		amd64 | x86_64)
-			export XKARCH="x86_64"
-			;;
-		arm64 | aarch64)
-			export XKARCH="arm64"
-			;;
-		armhf | armel)
-			export XKARCH="arm"
-			;;
-		ppc64le | ppc64)
-			export XKARCH="powerpc"
-			;;
-		riscv64 | riscv32)
-			export XKARCH="riscv"
-			;;
-		*)
-			echo "Architecture is not set or is not supported."
-			exit 1
-			;;
-	esac
+  case $BARCH in
+    amd64 | x86_64)
+      export XKARCH="x86_64"
+      ;;
+    arm64 | aarch64)
+      export XKARCH="arm64"
+      ;;
+    armhf | armel)
+      export XKARCH="arm"
+      ;;
+    ppc64le | ppc64)
+      export XKARCH="powerpc"
+      ;;
+    riscv64 | riscv32)
+      export XKARCH="riscv"
+      ;;
+    *)
+      echo "Architecture is not set or is not supported."
+      exit 1
+      ;;
+  esac
 
-	make mrproper
+  make mrproper
 
-	make ARCH=$XKARCH INSTALL_HDR_PATH="$PKG"/usr headers_install
-	
-	find "$PKG" \( -name .install -o -name ..install.cmd \) -print0 | xargs -0 rm -rf
+  make ARCH=$XKARCH INSTALL_HDR_PATH="$PKG"/usr headers_install
+
+  find "$PKG" \( -name .install -o -name ..install.cmd \) -print0 | xargs -0 rm -rf
 }

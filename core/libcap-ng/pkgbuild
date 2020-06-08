@@ -6,18 +6,18 @@ release=1
 source="https://github.com/stevegrubb/libcap-ng/archive/v$version.tar.gz"
 
 build() {
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	autoreconf -fiv
+  autoreconf -fiv
 
-	export ac_cv_prog_swig_found=no
+  export ac_cv_prog_swig_found=no
 
-	./configure $BUILDFLAGS \
-		--prefix=/usr \
-		--without-python \
-		--without-python3
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --without-python \
+    --without-python3
 
-	make
+  make
 
-	make DESTDIR="$PKG" install
+  make DESTDIR="$PKG" install
 }

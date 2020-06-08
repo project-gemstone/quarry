@@ -3,25 +3,24 @@
 name=libarchive
 version=3.4.0
 release=1
-source="https://www.libarchive.org/downloads/$name-$version.tar.gz libarchive-3.3.3-libressl.patch" 
-
+source="https://www.libarchive.org/downloads/$name-$version.tar.gz libarchive-3.3.3-libressl.patch"
 
 build() {
-	cd "$SRC"/$name-$version
+  cd "$SRC"/$name-$version
 
-	#patch -Np1 -i ../libarchive-3.3.3-libressl.patch
+  #patch -Np1 -i ../libarchive-3.3.3-libressl.patch
 
-	#sed -e "s|-rpath \$(libdir)|-rpath $ROOTFS_DIR/usr/lib|g" -e "s|\$(libarchive_la_LIBADD) \$(LIBS)|-L$ROOTFS_DIR/usr/lib|g" -i Makefile.in
+  #sed -e "s|-rpath \$(libdir)|-rpath $ROOTFS_DIR/usr/lib|g" -e "s|\$(libarchive_la_LIBADD) \$(LIBS)|-L$ROOTFS_DIR/usr/lib|g" -i Makefile.in
 
-	./configure $BUILDFLAGS \
-		--prefix=/usr \
-		--without-nettle \
-		--disable-static \
-		--without-xml2
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --without-nettle \
+    --disable-static \
+    --without-xml2
 
-	#sed "s|lt_sysroot=|lt_sysroot=$ROOTFS_DIR|g" -i libtool
+  #sed "s|lt_sysroot=|lt_sysroot=$ROOTFS_DIR|g" -i libtool
 
-	make
+  make
 
-	make DESTDIR="$PKG" install
+  make DESTDIR="$PKG" install
 }
