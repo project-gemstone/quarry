@@ -22,7 +22,7 @@ build() {
   echo "rootsbindir=/usr/bin" >>configparms
 
   BUILD_CC="$HOSTCC" \
-    CC="$XTARGET-gcc" \
+    CC="$XTARGET-gcc -ffile-prefix-map=/tools=/usr" \
     AR="$XTARGET-ar" \
     RANLIB="$XTARGET-ranlib" \
     ../configure \
