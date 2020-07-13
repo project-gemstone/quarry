@@ -1,7 +1,7 @@
 # description	: Header files and scripts for building modules for Linux kernel
 
 name=linux-api-headers
-version=5.2.11
+version=5.7.7
 release=1
 options="!emptydirs"
 source="https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-$version.tar.xz"
