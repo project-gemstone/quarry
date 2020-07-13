@@ -5,7 +5,7 @@ version=9.2.0
 isl_version=0.19
 release=1
 options="!strip"
-source="http://ftpmirror.gnu.org/gnu/gcc/gcc-$version/gcc-$version.tar.xz http://isl.gforge.inria.fr/isl-$isl_version.tar.xz gcc-pure64.patch c99 c89"
+source="http://ftpmirror.gnu.org/gnu/gcc/gcc-$version/gcc-$version.tar.xz c99 c89"
 
 build() {
   if [ -z "$XTARGET" ]; then
@@ -28,22 +28,9 @@ build() {
     esac
   fi
 
-  export CFLAGS_FOR_BUILD=" "
-  export FFLAGS_FOR_BUILD=" "
-  export CXXFLAGS_FOR_BUILD=" "
-  export LDFLAGS_FOR_BUILD=" "
-  export CFLAGS_FOR_TARGET=" "
-  export FFLAGS_FOR_TARGET=" "
-  export CXXFLAGS_FOR_TARGET=" "
-  export LDFLAGS_FOR_TARGET=" "
-
   cd "$SRC"/gcc-$version
 
   sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
-
-  patch -Np1 -i ../gcc-pure64.patch
-
-  mv ../isl-$isl_version isl
 
   mkdir build
 
