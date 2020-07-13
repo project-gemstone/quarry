@@ -1,8 +1,7 @@
 # description	: The GNU Compiler Collection
 
 name=gcc
-version=9.2.0
-isl_version=0.19
+version=10.1.0
 release=1
 options="!strip"
 source="http://ftpmirror.gnu.org/gnu/gcc/gcc-$version/gcc-$version.tar.xz c99 c89"
