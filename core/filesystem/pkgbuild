@@ -9,7 +9,7 @@ source="securetty services shadow shells sysctl ld.so.conf blacklist.conf cryptt
 build() {
   cd "$PKG"
 
-  for d in boot dev etc/{ld.so.conf.d,skel,profile.d,modprobe.d,sysctl.d} home media/{cdrom,flash,usbdisk,floppy,zip} mnt usr var opt srv/http run; do
+  for d in boot dev etc/{ld.so.conf.d,skel,profile.d,modprobe.d,sysctl.d} home /{media/{floppy,cdrom},srv,var} mnt usr var opt srv/http run; do
     install -d -m755 $d
   done
 
@@ -40,8 +40,19 @@ build() {
   install -d -m1777 var/{tmp,spool/mail}
 
   install -d -m775 -g 50 var/games
+  
+  touch var/log/{btmp,lastlog,faillog,wtmp}
+  
+  chgrp -v utmp var/log/lastlog
+  
+  chmod -v 664 var/log/lastlog
+  
+  chmod -v 600 var/log/btmp
+  
   ln -sf spool/mail var/mail
+  
   ln -sf ../run var/run
+  
   ln -sf ../run/lock var/lock
 
   for d in bin games include lib/{modules,firmware} share/misc src; do
