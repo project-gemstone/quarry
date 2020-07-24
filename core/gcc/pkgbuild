@@ -1,0 +1,116 @@
+# description	: The GNU Compiler Collection
+
+name=gcc
+version=10.1.0
+release=1
+options="!strip"
+source="http://ftpmirror.gnu.org/gnu/gcc/gcc-$version/gcc-$version.tar.xz c99 c89"
+
+build() {
+  if [ -z "$XTARGET" ]; then
+    export XTARGET="$(cc -dumpmachine)"
+    msg "Setting XTARGET: $XTARGET"
+  fi
+
+  if [ -z "$GCCOPTS" ]; then
+    case $BUILD_ARCH in
+      amd64 | x86_64)
+        export GCCOPTS="--with-arch=x86-64 --with-tune=generic"
+        ;;
+      arm64 | aarch64)
+        export GCCOPTS="--with-arch=armv8-a --enable-fix-cortex-a53-835769 --enable-fix-cortex-a53-843419"
+        ;;
+      *)
+        echo "Architecture is not set or is not supported by the gcc package."
+        exit 1
+        ;;
+    esac
+  fi
+
+  cd "$SRC"/gcc-$version
+
+  sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
+
+  mkdir build
+
+  cd build
+
+  SED=sed \
+    ../configure $GCCOPTS \
+    --prefix=/usr \
+    --build=$XHOST \
+    --host=$XTARGET \
+    --target=$XTARGET \
+    --with-linker-hash-style=gnu \
+    --libdir=/usr/lib \
+    --libexecdir=/usr/lib \
+    --with-pkgversion="Gemstone Linux $version targeting $BUILD_ARCH" \
+    --with-bugurl="https://github.com/project-gemstone/gemstone/issues" \
+    --with-isl \
+    --with-system-zlib \
+    --enable-__cxa_atexit \
+    --enable-checking=release \
+    --enable-clocale=generic \
+    --enable-default-pie \
+    --enable-default-ssp \
+    --enable-install-libiberty \
+    --enable-languages=c,c++,lto \
+    --enable-libstdcxx-time \
+    --enable-linker-build-id \
+    --enable-lto \
+    --enable-shared \
+    --enable-threads=posix \
+    --enable-tls \
+    --disable-bootstrap \
+    --disable-gnu-indirect-function \
+    --disable-libmudflap \
+    --disable-libsanitizer \
+    --disable-libssp \
+    --disable-libstdcxx-pch \
+    --disable-multilib \
+    --disable-nls \
+    --disable-symvers \
+    --disable-werror
+
+  if [ "$BOOTSTRAP" = "yes" ]; then
+    msg "Setting bootstrap settings for gcc..."
+    make AS_FOR_TARGET="$XTARGET-as" LD_FOR_TARGET="$XTARGET-ld"
+  else
+    make
+  fi
+
+  make -j1 DESTDIR="$PKG" install
+
+  ln -sf ../bin/cpp "$PKG"/usr/lib
+
+  install -dm755 "$PKG"/usr/lib/bfd-plugins
+
+  ln -sf /usr/lib/gcc/$XTARGET/$version/liblto_plugin.so "$PKG"/usr/lib/bfd-plugins/
+
+  mkdir -p "$PKG"/usr/share/gdb/auto-load/usr/lib
+
+  install -Dm755 "$SRC"/c89 "$PKG"/usr/bin/c89
+
+  install -Dm755 "$SRC"/c99 "$PKG"/usr/bin/c99
+
+  (
+    cd "$PKG"/usr/bin
+    mv g++ g++-gcc-$version
+    mv gcc gcc-$version
+    ln -sf g++-gcc-$version g++
+    ln -sf gcc-$version gcc
+    ln -sf g++ c++
+    ln -sf gcc cc
+    ln -sf gcc-$version $XTARGET-gcc
+    ln -sf gcc-$version $XTARGET-gcc-$version
+    ln -sf gcc-ar $XTARGET-gcc-ar
+    ln -sf gcc-nm $XTARGET-gcc-nm
+    ln -sf gcc-ranlib $XTARGET-gcc-ranlib
+    ln -sf g++-gcc-$version $XTARGET-c++
+    ln -sf g++-gcc-$version $XTARGET-g++
+  )
+
+  cd "$SRC"/gcc-$version
+
+  cat gcc/limitx.h gcc/glimits.h gcc/limity.h >$PKG/usr/lib/gcc/$XTARGET/$version/include-fixed/limits.h
+}

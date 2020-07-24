@@ -1,0 +1,16 @@
+# description	: Perfect hash function generator
+
+name=gperf
+version=3.1
+release=1
+source="http://ftp.gnu.org/gnu/$name/$name-$version.tar.gz"
+
+build() {
+  cd "$SRC"/$name-$version
+
+  ./configure $BUILDFLAGS --prefix=/usr
+
+  make
+
+  make DESTDIR="$PKG" install
+}

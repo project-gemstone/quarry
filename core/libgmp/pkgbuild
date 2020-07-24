@@ -1,0 +1,18 @@
+# description	: A free library for arbitrary precision arithmetic
+
+name=libgmp
+version=6.1.2
+release=1
+source="http://ftp.gnu.org/gnu/gmp/gmp-$version.tar.xz"
+
+build() {
+  cd "$SRC"/gmp-$version
+
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --enable-cxx
+
+  make
+
+  make DESTDIR="$PKG" install
+}

@@ -1,0 +1,20 @@
+# description	: Utility used to store, backup, and transport files
+
+name=tar
+version=1.32
+release=1
+source="http://ftp.gnu.org/gnu/$name/$name-$version.tar.xz"
+
+build() {
+  cd "$SRC"/$name-$version
+
+  export FORCE_UNSAFE_CONFIGURE=1
+
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --libexecdir=/usr/lib/tar
+
+  make
+
+  make DESTDIR="$PKG" install
+}

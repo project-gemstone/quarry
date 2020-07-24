@@ -1,0 +1,21 @@
+# description	: Multiple-precision floating-point library
+
+name=libmpfr
+version=4.0.2
+release=1
+source="https://ftp.gnu.org/gnu/mpfr/mpfr-$version.tar.xz"
+
+build() {
+  cd "$SRC"/mpfr-$version
+
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --enable-shared \
+    --enable-thread-safe
+
+  make
+
+  make DESTDIR="$PKG" install
+
+  rm -rf "$PKG"/usr/share
+}

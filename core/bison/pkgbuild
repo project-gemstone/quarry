@@ -1,0 +1,20 @@
+# description	: The GNU general-purpose parser generator
+
+name=bison
+version=3.4.2
+release=1
+source="http://ftp.gnu.org/gnu/$name/$name-$version.tar.xz"
+
+build() {
+  cd "$SRC"/$name-$version
+
+  M4=m4 \
+    ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --datadir=/usr/share \
+    --disable-nls
+
+  make
+
+  make DESTDIR="$PKG" install -j1
+}

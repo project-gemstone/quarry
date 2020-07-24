@@ -1,0 +1,18 @@
+# description	: A tool to copy files into or out of a cpio or tar archive
+
+name=cpio
+version=2.12
+release=1
+source=(http://ftpmirror.gnu.org/gnu/$name/$name-$version.tar.gz)
+
+build() {
+  cd $name-$version
+
+  ./configure $BUILDFLAGS --prefix=/usr --disable-nls
+
+  make
+
+  make DESTDIR=$PKG install
+
+  rm -f $PKG/usr/share/man/man8/rmt.8
+}

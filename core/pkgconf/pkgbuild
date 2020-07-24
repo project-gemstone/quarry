@@ -1,0 +1,23 @@
+# description: Package compiler and linker metadata toolkit
+
+name=pkgconf
+version=1.6.3
+release=1
+source="http://distfiles.dereferenced.org/$name/$name-$version.tar.xz"
+
+build() {
+  cd "$SRC"/$name-$version
+
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --with-pkg-config-dir="/usr/lib/pkgconfig:/usr/share/pkgconfig" \
+    --with-system-libdir="/usr/lib" \
+    --with-system-includedir="/usr/include"
+
+  make
+
+  make DESTDIR="$PKG" install
+
+  ln -sf pkgconf "$PKG"/usr/bin/pkg-config
+}

@@ -1,0 +1,16 @@
+# description	: An XML Parser library written in C
+
+name=expat
+version=2.2.6
+release=1
+source="https://github.com/libexpat/libexpat/releases/download/R_${version//./_}/expat-${version}.tar.bz2"
+
+build() {
+  cd "$SRC"/$name-$version
+
+  ./configure $BUILDFLAGS --prefix=/usr
+
+  make
+
+  make DESTDIR="$PKG" install
+}

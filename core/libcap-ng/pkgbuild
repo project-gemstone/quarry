@@ -1,0 +1,23 @@
+# description	: Library making programming with POSIX capabilities easier than traditional libcap
+
+name=libcap-ng
+version=0.7.10
+release=1
+source="https://github.com/stevegrubb/libcap-ng/archive/v$version.tar.gz"
+
+build() {
+  cd "$SRC"/$name-$version
+
+  autoreconf -fiv
+
+  export ac_cv_prog_swig_found=no
+
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --without-python \
+    --without-python3
+
+  make
+
+  make DESTDIR="$PKG" install
+}

@@ -1,0 +1,27 @@
+# description	: Libraries to handle ELF object files and DWARF debugging information
+
+name=libelf
+version=0.177
+release=1
+source="https://sourceware.org/elfutils/ftp/$version/elfutils-$version.tar.bz2"
+
+build() {
+  cd "$SRC"/elfutils-$version
+
+  #patch -Np1 -i "$STUFF"/libelf/no-werror.patch
+
+  autoreconf -fiv
+
+  ./configure $TOOLFLAGS \
+    --prefix=/usr \
+    --enable-deterministic-archives \
+    --disable-werror
+
+  make
+
+  make -C libelf DESTDIR="$PKG" install
+
+  mkdir -p "$PKG"/usr/lib/pkgconfig
+
+  cp config/libelf.pc "$PKG"/usr/lib/pkgconfig
+}

@@ -1,0 +1,18 @@
+# description	: An arbitrary precision numeric processing language (calculator)
+
+name=bc
+version=1.07.1
+release=1
+source="https://ftp.gnu.org/gnu/bc/$name-$version.tar.gz"
+
+build() {
+  cd "$SRC"/$name-$version
+
+  PREFIX=/usr ./configure.sh --disable-nls
+
+  make PREFIX=/usr
+
+  make PREFIX=/usr DESTDIR="$PKG" install
+
+  rm -rf "$PKG"/usr/share/locale
+}

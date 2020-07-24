@@ -1,0 +1,29 @@
+# description	: Ttilities for internationalization and localization
+
+name=gettext
+version=0.20.1
+release=1
+source="https://ftp.gnu.org/gnu/gettext/$name-$version.tar.gz"
+
+build() {
+  cd "$SRC"/$name-$version
+
+  ./configure $BUILDFLAGS --prefix=/usr --disable-static
+
+  # get rid of host lib search dirs from Makefiles
+  for mk in $(find -name Makefile); do
+    sed -i 's|-L/usr/lib||' $mk
+  done
+
+  # use same type fix as done for gcc port, to prevent libtool
+  # from linking in host libraries
+  for lt_file in $(find -name 'libtool'); do
+    sed -i 's/func_append add_dir \" /add_dir=\"/' $lt_file
+  done
+
+  make
+
+  make DESTDIR="$PKG" install -j1
+
+  chmod -v 0755 $PKG/usr/lib/preloadable_libintl.so
+}

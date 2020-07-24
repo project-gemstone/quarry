@@ -1,0 +1,20 @@
+# description	: GNU awk pattern-matching language
+
+name=gawk
+version=5.0.1
+release=1
+source="http://ftp.gnu.org/gnu/$name/$name-$version.tar.gz"
+
+build() {
+  cd "$SRC"/$name-$version
+
+  ./configure $BUILDFLAGS \
+    --prefix=/usr \
+    --libexecdir=/usr/lib \
+    --sysconfdir=/etc \
+    --without-libsigsegv
+
+  make
+
+  make DESTDIR="$PKG" install
+}
